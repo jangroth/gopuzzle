@@ -10,22 +10,24 @@ import (
 type Puzzle struct {
 	Matrix [][]int
 	Pieces [][]int
+	maxX   int
+	maxY   int
 }
 
 func (p Puzzle) dump() {
-	for y := 0; y < len(p.Matrix); y++ {
-		for x := 0; x < len(p.Matrix[y]); x++ {
+	for y := 0; y < p.maxY; y++ {
+		for x := 0; x < p.maxX; x++ {
 			fmt.Printf("%d ", p.Matrix[y][x])
 		}
 		fmt.Println()
 	}
-	fmt.Printf("(x:%d, y:%d)\n", len(p.Matrix[0]), len(p.Matrix))
+	fmt.Printf("(x:%d, y:%d)\n", p.maxX, p.maxY)
 }
 
 func (p Puzzle) nextFreeCell(startX int, startY int) (int, int) {
 	fmt.Printf("\nnext free cell %d - %d\n", startX, startY)
-	for x := startX; x < len(p.Matrix[0]); x++ {
-		for y := startY; y < len(p.Matrix); y++ {
+	for y := startY; y < p.maxY; y++ {
+		for x := startX; x < p.maxX; x++ {
 			fmt.Printf("x: %d, y:%d, matrix %d\n", x, y, p.Matrix[x][y])
 			if p.Matrix[x][y] == 0 && (x != startX || y != startY) {
 				return x, y
@@ -49,7 +51,7 @@ func NewPuzzle(maxX int, maxY int) *Puzzle {
 			}
 		}
 	}
-	return &Puzzle{Matrix: matrix}
+	return &Puzzle{Matrix: matrix, maxX: maxX, maxY: maxY}
 }
 
 func main() {
