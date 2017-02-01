@@ -17,7 +17,7 @@ type Puzzle struct {
 func (p Puzzle) dump() {
 	for y := 0; y < p.maxY; y++ {
 		for x := 0; x < p.maxX; x++ {
-			fmt.Printf("%d ", p.Matrix[y][x])
+			fmt.Printf("%d ", p.Matrix[x][y])
 		}
 		fmt.Println()
 	}
@@ -27,7 +27,10 @@ func (p Puzzle) dump() {
 func (p Puzzle) nextFreeCell(startX int, startY int) (int, int) {
 	fmt.Printf("\nnext free cell %d - %d\n", startX, startY)
 	for y := startY; y < p.maxY; y++ {
-		for x := startX; x < p.maxX; x++ {
+		for x := 0; x < p.maxX; x++ {
+			if y == startY && x == 0 {
+				x = startX
+			}
 			fmt.Printf("x: %d, y:%d, matrix %d\n", x, y, p.Matrix[x][y])
 			if p.Matrix[x][y] == 0 && (x != startX || y != startY) {
 				return x, y
