@@ -22,7 +22,7 @@ func (p Puzzle) dump() {
 	fmt.Printf("(x:%d, y:%d)\n", len(p.Matrix[0]), len(p.Matrix))
 }
 
-func initPuzzle(maxX int, maxY int) Puzzle {
+func NewPuzzle(maxX int, maxY int) *Puzzle {
 	var matrix [][]int
 	for x := 0; x < maxX; x++ {
 		column := make([]int, maxY)
@@ -36,13 +36,11 @@ func initPuzzle(maxX int, maxY int) Puzzle {
 			}
 		}
 	}
-	var puzzle Puzzle
-	puzzle.Matrix = matrix
-	return puzzle
+	return &Puzzle{Matrix: matrix}
 }
 
 func main() {
-	puzzle := initPuzzle(15, 10)
+	puzzle := NewPuzzle(15, 10)
 	puzzle.dump()
 }
 
