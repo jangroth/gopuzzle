@@ -28,12 +28,11 @@ func (p Puzzle) nextFreeCell(startX int, startY int) (int, int) {
 	fmt.Printf("\nnext free cell %d - %d\n", startX, startY)
 	for y := startY; y < p.maxY; y++ {
 		for x := 0; x < p.maxX; x++ {
-			if y == startY && x == 0 {
-				x = startX
-			}
 			fmt.Printf("x: %d, y:%d, matrix %d\n", x, y, p.Matrix[x][y])
-			if p.Matrix[x][y] == 0 && (x != startX || y != startY) {
-				return x, y
+			if (y == startY && x > startX) || y != startY {
+				if p.Matrix[x][y] == 0 {
+					return x, y
+				}
 			}
 		}
 	}
