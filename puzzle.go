@@ -9,9 +9,13 @@ import (
 
 type Puzzle struct {
 	Matrix [][]int
-	Pieces [][]int
+	Pieces []Piece
 	maxX   int
 	maxY   int
+}
+
+type Piece struct {
+	piectrix [][]int
 }
 
 func (p Puzzle) dump() {
@@ -24,7 +28,7 @@ func (p Puzzle) dump() {
 	fmt.Printf("(x:%d, y:%d)\n", p.maxX, p.maxY)
 }
 
-func (p Puzzle) nextFreeCell(startX int, startY int) (int, int) {
+func (p Puzzle) nextFreeCell(startX, startY int) (int, int) {
 	fmt.Printf("\nnext free cell %d - %d\n", startX, startY)
 	for y := startY; y < p.maxY; y++ {
 		for x := 0; x < p.maxX; x++ {
@@ -39,7 +43,7 @@ func (p Puzzle) nextFreeCell(startX int, startY int) (int, int) {
 	return -1, -1
 }
 
-func NewPuzzle(maxX int, maxY int) *Puzzle {
+func NewPuzzle(maxX, maxY int) *Puzzle {
 	var matrix [][]int
 	for x := 0; x < maxX; x++ {
 		column := make([]int, maxY)
