@@ -18,7 +18,7 @@ type Piece struct {
 	piectrix [][]int
 }
 
-func (p Puzzle) dump() {
+func (p *Puzzle) dump() {
 	for y := 0; y < p.maxY; y++ {
 		for x := 0; x < p.maxX; x++ {
 			fmt.Printf("%d ", p.Matrix[x][y])
@@ -28,7 +28,7 @@ func (p Puzzle) dump() {
 	fmt.Printf("(x:%d, y:%d)\n", p.maxX, p.maxY)
 }
 
-func (p Puzzle) nextFreeCell(startX, startY int) (int, int) {
+func (p *Puzzle) nextFreeCell(startX, startY int) (int, int) {
 	fmt.Printf("\nnext free cell %d - %d\n", startX, startY)
 	for y := startY; y < p.maxY; y++ {
 		for x := 0; x < p.maxX; x++ {
