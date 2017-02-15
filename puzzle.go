@@ -65,6 +65,19 @@ func NewPuzzle(maxX, maxY int) *Puzzle {
 	return &Puzzle{matrix: matrix, maxX: maxX, maxY: maxY}
 }
 
+func NewPiece(maxX, maxY, value int, points ...Point) *Piece {
+	var matrix [][]int
+	for x := 0; x < maxX; x++ {
+		column := make([]int, maxY)
+		matrix = append(matrix, column)
+	}
+	for _, val := range points {
+		matrix[val.x][val.y] = value
+	}
+
+	return &Piece{piectrix: matrix}
+}
+
 func main() {
 	puzzle := NewPuzzle(15, 10)
 	puzzle.dump()
