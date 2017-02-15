@@ -5,42 +5,47 @@ import (
 	"fmt"
 )
 
-// TODO: Point struct?
-
-type Puzzle struct {
-	Matrix [][]int
-	Pieces []Piece
-	maxX   int
-	maxY   int
-}
-
 type Piece struct {
 	piectrix [][]int
+}
+
+type Point struct {
+	x, y int
+}
+
+type Puzzle struct {
+	matrix     [][]int
+	pieces     []Piece
+	maxX, maxY int
+}
+
+func (p *Point) String() string {
+	return fmt.Sprintf("(%d,%d)", p.x, p.y)
 }
 
 func (p *Puzzle) dump() {
 	for y := 0; y < p.maxY; y++ {
 		for x := 0; x < p.maxX; x++ {
-			fmt.Printf("%d ", p.Matrix[x][y])
+			fmt.Printf("%d ", p.matrix[x][y])
 		}
 		fmt.Println()
 	}
-	fmt.Printf("(x:%d, y:%d)\n", p.maxX, p.maxY)
+	fmt.Printf("size: x:%d, y:%d\n", p.maxX, p.maxY)
 }
 
-func (p *Puzzle) nextFreeCell(startX, startY int) (int, int) {
-	fmt.Printf("\nnext free cell %d - %d\n", startX, startY)
-	for y := startY; y < p.maxY; y++ {
+func (p *Puzzle) nextFreeCell(pnt Point) Point {
+	fmt.Printf("\nnext free cell for: %s\n", pnt)
+	for y := pnt.y; y < p.maxY; y++ {
 		for x := 0; x < p.maxX; x++ {
-			fmt.Printf("x: %d, y:%d, matrix %d\n", x, y, p.Matrix[x][y])
-			if (y == startY && x > startX) || y != startY {
-				if p.Matrix[x][y] == 0 {
-					return x, y
+			fmt.Printf("%s -> %d\n", Point{x, y}, p.matrix[x][y])
+			if (y == pnt.y && x > pnt.x) || y != pnt.y {
+				if p.matrix[x][y] == 0 {
+					return Point{x, y}
 				}
 			}
 		}
 	}
-	return -1, -1
+	return Point{-1, -1}
 }
 
 func NewPuzzle(maxX, maxY int) *Puzzle {
@@ -57,7 +62,7 @@ func NewPuzzle(maxX, maxY int) *Puzzle {
 			}
 		}
 	}
-	return &Puzzle{Matrix: matrix, maxX: maxX, maxY: maxY}
+	return &Puzzle{matrix: matrix, maxX: maxX, maxY: maxY}
 }
 
 func main() {
