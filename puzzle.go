@@ -19,7 +19,7 @@ type Puzzle struct {
 	maxX, maxY int
 }
 
-func (p *Point) String() string {
+func (p Point) String() string {
 	return fmt.Sprintf("(%d,%d)", p.x, p.y)
 }
 
@@ -37,7 +37,7 @@ func (p *Puzzle) nextFreeCell(pnt Point) Point {
 	fmt.Printf("\nnext free cell for: %s\n", pnt)
 	for y := pnt.y; y < p.maxY; y++ {
 		for x := 0; x < p.maxX; x++ {
-			fmt.Printf("%s -> %d\n", Point{x, y}, p.matrix[x][y])
+			fmt.Printf("%s:%d\n", Point{x, y}, p.matrix[x][y])
 			if (y == pnt.y && x > pnt.x) || y != pnt.y {
 				if p.matrix[x][y] == 0 {
 					return Point{x, y}

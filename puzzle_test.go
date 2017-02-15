@@ -29,7 +29,7 @@ func TestNextFreeCell(t *testing.T) {
 	}
 
 	pnt = testPuzzle.nextFreeCell(Point{2, 0})
-	if !(pnt.x == 1 && pnt.y == 1) {
+	if !(pnt.x == 1 && pnt.y == 2) {
 		t.Errorf("Failed - (2, 0) returned %s instead of (1,1)", pnt)
 	}
 }
