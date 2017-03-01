@@ -14,9 +14,8 @@ type Point struct {
 }
 
 type Puzzle struct {
-	matrix     [][]int
-	pieces     []Piece
-	maxX, maxY int
+	matrix [][]int
+	pieces []Piece
 }
 
 func (p *Piece) dump() {
@@ -52,7 +51,7 @@ func (p *Puzzle) dump() {
 	dump(&p.matrix)
 }
 
-func NewPuzzle(maxX, maxY int) *Puzzle {
+func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {
 	var matrix [][]int
 	for x := 0; x < maxX; x++ {
 		column := make([]int, maxY)
@@ -66,14 +65,14 @@ func NewPuzzle(maxX, maxY int) *Puzzle {
 			}
 		}
 	}
-	return &Puzzle{matrix: matrix, maxX: maxX, maxY: maxY}
+	return &Puzzle{matrix: matrix, pieces: pieces}
 }
 
 func (p *Puzzle) nextFreeCell(pnt Point) Point {
 	fmt.Printf("\nnext free cell for: %s\n", pnt)
-	for y := pnt.y; y < p.maxY; y++ {
-		for x := 0; x < p.maxX; x++ {
-			fmt.Printf("%s:%d\n", Point{x, y}, p.matrix[x][y])
+	for y := pnt.y; y < len((*p).matrix[0]); y++ {
+		for x := 0; x < len((*p).matrix); x++ {
+			fmt.Printf("%s:%d\t", Point{x, y}, (*p).matrix[x][y])
 			if (y == pnt.y && x > pnt.x) || y != pnt.y {
 				if p.matrix[x][y] == 0 {
 					return Point{x, y}
