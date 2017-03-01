@@ -83,6 +83,10 @@ func (p *Puzzle) nextFreeCell(pnt Point) Point {
 	return Point{-1, -1}
 }
 
+func place(matrix *[][]int, piece *Piece, point Point) (*[][]int, bool) {
+	return nil, false
+}
+
 func dump(matrix *[][]int) {
 	maxX, maxY := len(*matrix), len((*matrix)[0])
 	for y := 0; y < maxY; y++ {

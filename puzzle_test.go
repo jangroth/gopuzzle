@@ -1,8 +1,21 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
+
+func TestPlacement(t *testing.T) {
+	puzzle := NewPuzzle(5, 3)
+	matrix := &puzzle.matrix
+	piece := NewPiece(2, Point{1, 0}, Point{1, 1})
+	var success bool
+	matrix, success = place(&puzzle.matrix, piece, Point{1, 1})
+	fmt.Printf("%t", matrix)
+	if !success {
+		t.Error("This piece should fit into the matrix")
+	}
+}
 
 func TestNewPiece(t *testing.T) {
 	piece := NewPiece(2, Point{1, 0}, Point{1, 1})
