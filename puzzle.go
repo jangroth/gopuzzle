@@ -34,7 +34,7 @@ func NewPiece(value int, points ...Point) *Piece {
 			maxY = val.y
 		}
 	}
-	matrix := createEmptyMatrix(maxX, maxY)
+	matrix := createEmptyMatrix(maxX+1, maxY+1)
 	for _, val := range points {
 		matrix[val.x][val.y] = value
 	}
@@ -50,16 +50,14 @@ func (p *Puzzle) dump() {
 }
 
 func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {
-	var matrix Matrix
+	matrix := createEmptyMatrix(maxX, maxY)
 	for x := 0; x < maxX; x++ {
-		column := make([]int, maxY)
-		matrix = append(matrix, column)
 		for y := 0; y < maxY; y++ {
 			switch {
 			case y == 0 || y == maxY-1:
-				column[y] = 1
+				matrix[x][y] = 1
 			case x == 0 || x == maxX-1:
-				column[y] = 1
+				matrix[x][y] = 1
 			}
 		}
 	}
@@ -112,8 +110,8 @@ func dump(matrix *Matrix) {
 
 func createEmptyMatrix(maxX, maxY int) Matrix {
 	var matrix [][]int
-	for x := 0; x < maxX+1; x++ {
-		column := make([]int, maxY+1)
+	for x := 0; x < maxX; x++ {
+		column := make([]int, maxY)
 		matrix = append(matrix, column)
 	}
 	return matrix
