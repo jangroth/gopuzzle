@@ -5,16 +5,18 @@ import (
 	"fmt"
 )
 
-type Piece struct {
-	piecetrix [][]int
-}
-
 type Point struct {
 	x, y int
 }
 
+type Matrix [][]int
+
+type Piece struct {
+	piecetrix Matrix
+}
+
 type Puzzle struct {
-	matrix [][]int
+	matrix Matrix
 	pieces []Piece
 }
 
@@ -48,7 +50,7 @@ func (p *Puzzle) dump() {
 }
 
 func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {
-	var matrix [][]int
+	var matrix Matrix
 	for x := 0; x < maxX; x++ {
 		column := make([]int, maxY)
 		matrix = append(matrix, column)
@@ -79,7 +81,7 @@ func (p *Puzzle) nextFreeCell(pnt Point) Point {
 	return Point{-1, -1}
 }
 
-func place(matrix *[][]int, piece *Piece, point Point) (*[][]int, bool) {
+func place(matrix *Matrix, piece *Piece, point Point) (*Matrix, bool) {
 	success := true
 	pieceX := len(((*piece).piecetrix)[0])
 	pieceY := len((*piece).piecetrix)
@@ -97,7 +99,7 @@ func place(matrix *[][]int, piece *Piece, point Point) (*[][]int, bool) {
 	return nil, success
 }
 
-func dump(matrix *[][]int) {
+func dump(matrix *Matrix) {
 	maxX, maxY := len(*matrix), len((*matrix)[0])
 	for y := 0; y < maxY; y++ {
 		for x := 0; x < maxX; x++ {
@@ -108,7 +110,7 @@ func dump(matrix *[][]int) {
 	fmt.Printf("size: x:%d, y:%d\n", maxX, maxY)
 }
 
-func createEmptyMatrix(maxX, maxY int) [][]int {
+func createEmptyMatrix(maxX, maxY int) Matrix {
 	var matrix [][]int
 	for x := 0; x < maxX+1; x++ {
 		column := make([]int, maxY+1)
