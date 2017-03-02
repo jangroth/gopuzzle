@@ -21,7 +21,7 @@ func TestPlacement(t *testing.T) {
 
 func TestNewPiece(t *testing.T) {
 	piece := NewPiece(2, Point{1, 0}, Point{1, 1})
-	piece.dump()
+	piece.piecetrix.dump()
 	if !(len(piece.piecetrix) == 2 && len(piece.piecetrix[0]) == 2) {
 		t.Error("Testpiece doesn't have the right size")
 	}
@@ -32,7 +32,7 @@ func TestNewPiece(t *testing.T) {
 
 func TestNextFreeCell(t *testing.T) {
 	puzzle := NewPuzzle(5, 3)
-	puzzle.dump()
+	puzzle.matrix.dump()
 
 	pnt := puzzle.nextFreeCell(Point{1, 1})
 	if !(pnt.x == 2 && pnt.y == 1) {
