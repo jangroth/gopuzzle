@@ -9,14 +9,18 @@ func TestPlacement(t *testing.T) {
 	var matrix *Matrix
 	puzzle := NewPuzzle(5, 3)
 	piece := NewPiece(2, Point{1, 0}, Point{1, 1})
-	_, success := place(&puzzle.matrix, piece, Point{1, 1})
+	matrix, success := place(&puzzle.matrix, piece, Point{1, 1})
 	if success {
 		t.Error("This piece should not fit into the matrix")
 	}
+	if !compare(matrix,
+		[]int{1, 1, 1, 1, 1},
+		[]int{1, 0, 0, 0, 1},
+		[]int{1, 1, 1, 1, 1}) {
+		t.Error("This matrix doesn't look right")
+	}
 	puzzle = NewPuzzle(5, 4)
 	matrix, success = place(&puzzle.matrix, piece, Point{1, 1})
-	fmt.Println(matrix)
-	matrix.dump()
 	if !success {
 		t.Error("This piece should fit into the matrix")
 	}
@@ -71,6 +75,7 @@ func TestNextFreeCell(t *testing.T) {
 }
 
 func compare(matrix *Matrix, rows ...[]int) bool {
+	matrix.dump()
 	for index, row := range rows {
 		for x := 0; x < len(row); x++ {
 			fmt.Printf("%d:m%d-r%d \t", x, (*matrix)[x][index], row[x])

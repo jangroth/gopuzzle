@@ -89,19 +89,23 @@ func (p Point) String() string {
 }
 
 func place(matrix *Matrix, piece *Piece, point Point) (*Matrix, bool) {
-	success := true
 	pieceX := len(((*piece).piecetrix)[0])
 	pieceY := len((*piece).piecetrix)
 	for x := 0; x < pieceX; x++ {
 		for y := 0; y < pieceY; y++ {
-			if (*matrix)[x+point.x][y+point.y] == 0 {
-				(*matrix)[x+point.x][y+point.y] = (*piece).piecetrix[x][y]
-			} else {
-				success = false
+			if (*piece).piecetrix[x][y] != 0 && ((*matrix)[x+point.x][y+point.y] != 0) {
+				return matrix, false
 			}
 		}
 	}
-	return matrix, success
+	for x := 0; x < pieceX; x++ {
+		for y := 0; y < pieceY; y++ {
+			if (*piece).piecetrix[x][y] != 0 {
+				(*matrix)[x+point.x][y+point.y] = (*piece).piecetrix[x][y]
+			}
+		}
+	}
+	return matrix, true
 }
 
 func main() {
