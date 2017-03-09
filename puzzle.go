@@ -101,9 +101,7 @@ func place(matrix *Matrix, piece *Piece, point Point) (*Matrix, bool) {
 			}
 		}
 	}
-	matrix.dump()
-
-	return nil, success
+	return matrix, success
 }
 
 func main() {

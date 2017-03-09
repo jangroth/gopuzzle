@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
 func TestPlacement(t *testing.T) {
+	var matrix *Matrix
 	puzzle := NewPuzzle(5, 3)
 	piece := NewPiece(2, Point{1, 0}, Point{1, 1})
 	_, success := place(&puzzle.matrix, piece, Point{1, 1})
@@ -12,11 +14,19 @@ func TestPlacement(t *testing.T) {
 		t.Error("This piece should not fit into the matrix")
 	}
 	puzzle = NewPuzzle(5, 4)
-	_, success = place(&puzzle.matrix, piece, Point{1, 1})
+	matrix, success = place(&puzzle.matrix, piece, Point{1, 1})
+	fmt.Println(matrix)
+	matrix.dump()
 	if !success {
 		t.Error("This piece should fit into the matrix")
 	}
-
+	if !compare(matrix,
+		[]int{1, 1, 1, 1, 1},
+		[]int{1, 0, 2, 0, 1},
+		[]int{1, 0, 2, 0, 1},
+		[]int{1, 1, 1, 1, 1}) {
+		t.Error("This matrix doesn't look right")
+	}
 }
 
 func TestNewPiece(t *testing.T) {
@@ -58,4 +68,17 @@ func TestNextFreeCell(t *testing.T) {
 	if !(pnt.x == 1 && pnt.y == 1) {
 		t.Errorf("Failed - (2, 0) returned %s instead of (1,1)", pnt)
 	}
+}
+
+func compare(matrix *Matrix, rows ...[]int) bool {
+	for index, row := range rows {
+		for x := 0; x < len(row); x++ {
+			fmt.Printf("%d:m%d-r%d \t", x, (*matrix)[x][index], row[x])
+			if (*matrix)[x][index] != row[x] {
+				return false
+			}
+		}
+		fmt.Println()
+	}
+	return true
 }
