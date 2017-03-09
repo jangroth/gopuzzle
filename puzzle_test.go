@@ -31,6 +31,19 @@ func TestPlacement(t *testing.T) {
 		[]int{1, 1, 1, 1, 1}) {
 		t.Error("This matrix doesn't look right")
 	}
+	pieceX1 := NewPiece(2, Point{0, 0}, Point{1, 1})
+	pieceX2 := NewPiece(3, Point{0, 1}, Point{1, 0})
+	puzzle = NewPuzzle(4, 4)
+	matrix, _ = place(&puzzle.matrix, pieceX1, Point{1, 1})
+	matrix, _ = place(&puzzle.matrix, pieceX2, Point{1, 1})
+	if !compare(matrix,
+		[]int{1, 1, 1, 1},
+		[]int{1, 2, 3, 1},
+		[]int{1, 3, 2, 1},
+		[]int{1, 1, 1, 1}) {
+		t.Error("This matrix doesn't look right")
+	}
+
 }
 
 func TestNewPiece(t *testing.T) {
