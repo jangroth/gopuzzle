@@ -57,6 +57,11 @@ func NewPiece(value int, points ...Point) *Piece {
 	return &Piece{piecetrix: *matrix}
 }
 
+func (piece *Piece) mirror() Piece {
+
+	return *piece
+}
+
 func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {
 	matrix := NewMatrix(maxX, maxY)
 	for x := 0; x < maxX; x++ {
