@@ -8,13 +8,14 @@ import (
 func TestMirror(t *testing.T) {
 	piece := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
 	mirroredPiece := piece.mirror()
-	mirroredPiece.piecetrix.dump()
+	if piece == mirroredPiece {
+		t.Error("These should be two different objects")
+	}
 	if !compare(&mirroredPiece.piecetrix,
 		[]int{0, 0, 2},
 		[]int{2, 2, 2}) {
 		t.Error("This matrix doesn't look right")
 	}
-
 }
 
 func TestPlacement(t *testing.T) {

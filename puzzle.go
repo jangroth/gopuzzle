@@ -5,6 +5,8 @@ import (
 	"fmt"
 )
 
+// types
+
 type Point struct {
 	x, y int
 }
@@ -19,6 +21,8 @@ type Puzzle struct {
 	matrix Matrix
 	pieces []Piece
 }
+
+// methods
 
 func NewMatrix(maxX, maxY int) *Matrix {
 	var matrix Matrix
@@ -57,9 +61,15 @@ func NewPiece(value int, points ...Point) *Piece {
 	return &Piece{piecetrix: *matrix}
 }
 
-func (piece *Piece) mirror() Piece {
-
-	return *piece
+func (piece *Piece) mirror() *Piece {
+	maxX, maxY := len(piece.piecetrix), len((piece.piecetrix)[0])
+	mirror := NewMatrix(maxX, maxY)
+	for x := 0; x < maxX; x++ {
+		for y := 0; y < maxY; y++ {
+			(*mirror)[x][y] = (*piece).piecetrix[x][maxY-y-1]
+		}
+	}
+	return &Piece{piecetrix: *mirror}
 }
 
 func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {
@@ -92,6 +102,8 @@ func (p *Puzzle) nextFreeCell(pnt Point) Point {
 func (p Point) String() string {
 	return fmt.Sprintf("(%d,%d)", p.x, p.y)
 }
+
+// functions
 
 func place(matrix *Matrix, piece *Piece, point Point) (*Matrix, bool) {
 	pieceX := len(((*piece).piecetrix)[0])
