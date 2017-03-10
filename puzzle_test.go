@@ -16,6 +16,16 @@ func TestMirror(t *testing.T) {
 		[]int{2, 2, 2}) {
 		t.Error("This matrix doesn't look right")
 	}
+	piece = NewPiece(3, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1}, Point{3, 3})
+	piece.piecetrix.dump()
+	mirroredPiece = piece.mirror()
+	if !compare(&mirroredPiece.piecetrix,
+		[]int{0, 0, 0, 3},
+		[]int{0, 0, 0, 0},
+		[]int{0, 0, 3, 0},
+		[]int{3, 3, 3, 0}) {
+		t.Error("This matrix doesn't look right")
+	}
 }
 
 func TestPlacement(t *testing.T) {
