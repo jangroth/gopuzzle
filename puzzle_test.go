@@ -5,6 +5,21 @@ import (
 	"testing"
 )
 
+func TestRotate(t *testing.T) {
+	piece := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
+	piece.matrix.dump()
+	rotatedPiece := piece.rotate()
+	if piece == rotatedPiece {
+		t.Error("These should be two different objects")
+	}
+	if !compare(&rotatedPiece.matrix,
+		[]int{0, 2},
+		[]int{0, 2},
+		[]int{2, 2}) {
+		t.Error("This matrix doesn't look right")
+	}
+}
+
 func TestMirror(t *testing.T) {
 	piece := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
 	mirroredPiece := piece.mirror()
