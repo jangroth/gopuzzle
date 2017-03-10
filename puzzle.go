@@ -14,7 +14,7 @@ type Point struct {
 type Matrix [][]int
 
 type Piece struct {
-	piecetrix Matrix
+	matrix Matrix
 }
 
 type Puzzle struct {
@@ -58,18 +58,18 @@ func NewPiece(value int, points ...Point) *Piece {
 	for _, val := range points {
 		(*matrix)[val.x][val.y] = value
 	}
-	return &Piece{piecetrix: *matrix}
+	return &Piece{matrix: *matrix}
 }
 
 func (piece *Piece) mirror() *Piece {
-	maxX, maxY := len(piece.piecetrix), len((piece.piecetrix)[0])
+	maxX, maxY := len(piece.matrix), len((piece.matrix)[0])
 	mirror := NewMatrix(maxX, maxY)
 	for x := 0; x < maxX; x++ {
 		for y := 0; y < maxY; y++ {
-			(*mirror)[x][y] = (*piece).piecetrix[x][maxY-y-1]
+			(*mirror)[x][y] = (*piece).matrix[x][maxY-y-1]
 		}
 	}
-	return &Piece{piecetrix: *mirror}
+	return &Piece{matrix: *mirror}
 }
 
 func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {
@@ -106,19 +106,19 @@ func (p Point) String() string {
 // functions
 
 func place(matrix *Matrix, piece *Piece, point Point) (*Matrix, bool) {
-	pieceX := len(((*piece).piecetrix)[0])
-	pieceY := len((*piece).piecetrix)
+	pieceX := len(((*piece).matrix)[0])
+	pieceY := len((*piece).matrix)
 	for x := 0; x < pieceX; x++ {
 		for y := 0; y < pieceY; y++ {
-			if (*piece).piecetrix[x][y] != 0 && ((*matrix)[x+point.x][y+point.y] != 0) {
+			if (*piece).matrix[x][y] != 0 && ((*matrix)[x+point.x][y+point.y] != 0) {
 				return matrix, false
 			}
 		}
 	}
 	for x := 0; x < pieceX; x++ {
 		for y := 0; y < pieceY; y++ {
-			if (*piece).piecetrix[x][y] != 0 {
-				(*matrix)[x+point.x][y+point.y] = (*piece).piecetrix[x][y]
+			if (*piece).matrix[x][y] != 0 {
+				(*matrix)[x+point.x][y+point.y] = (*piece).matrix[x][y]
 			}
 		}
 	}

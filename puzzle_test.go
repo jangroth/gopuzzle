@@ -11,15 +11,15 @@ func TestMirror(t *testing.T) {
 	if piece == mirroredPiece {
 		t.Error("These should be two different objects")
 	}
-	if !compare(&mirroredPiece.piecetrix,
+	if !compare(&mirroredPiece.matrix,
 		[]int{0, 0, 2},
 		[]int{2, 2, 2}) {
 		t.Error("This matrix doesn't look right")
 	}
 	piece = NewPiece(3, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1}, Point{3, 3})
-	piece.piecetrix.dump()
+	piece.matrix.dump()
 	mirroredPiece = piece.mirror()
-	if !compare(&mirroredPiece.piecetrix,
+	if !compare(&mirroredPiece.matrix,
 		[]int{0, 0, 0, 3},
 		[]int{0, 0, 0, 0},
 		[]int{0, 0, 3, 0},
@@ -71,11 +71,11 @@ func TestPlacement(t *testing.T) {
 
 func TestNewPiece(t *testing.T) {
 	piece := NewPiece(2, Point{1, 0}, Point{1, 1})
-	piece.piecetrix.dump()
-	if !(len(piece.piecetrix) == 2 && len(piece.piecetrix[0]) == 2) {
+	piece.matrix.dump()
+	if !(len(piece.matrix) == 2 && len(piece.matrix[0]) == 2) {
 		t.Error("Testpiece doesn't have the right size")
 	}
-	if !(piece.piecetrix[1][0] == 2 && piece.piecetrix[0][1] == 0 && piece.piecetrix[1][1] == 2 && piece.piecetrix[0][0] == 0) {
+	if !(piece.matrix[1][0] == 2 && piece.matrix[0][1] == 0 && piece.matrix[1][1] == 2 && piece.matrix[0][0] == 0) {
 		t.Errorf("Testpiece doesn't look right %s", piece)
 	}
 }
