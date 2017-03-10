@@ -110,7 +110,7 @@ func (p Point) String() string {
 
 // functions
 
-func place(matrix *Matrix, piece *Piece, point Point) (*Matrix, bool) {
+func place(matrix *Matrix, piece *Piece, point Point) (modified_matrix *Matrix, success bool) {
 	pieceX, pieceY := (*piece).matrix.dimensions()
 	for x := 0; x < pieceX; x++ {
 		for y := 0; y < pieceY; y++ {
