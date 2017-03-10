@@ -1,2 +1,5 @@
 # gopuzzle
-puzzle solver in golang
+
+Solve this puzzle for me:
+
+![puzzle](resources/puzzle.jpg?raw=true "Puzzle")
