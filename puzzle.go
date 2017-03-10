@@ -67,24 +67,24 @@ func NewPiece(value int, points ...Point) *Piece {
 
 func (piece *Piece) mirror() *Piece {
 	maxX, maxY := piece.matrix.dimensions()
-	mirror := NewMatrix(maxX, maxY)
+	mirrored := NewMatrix(maxX, maxY)
 	for x := 0; x < maxX; x++ {
 		for y := 0; y < maxY; y++ {
-			(*mirror)[x][y] = (*piece).matrix[x][maxY-y-1]
+			(*mirrored)[x][y] = (*piece).matrix[x][maxY-y-1]
 		}
 	}
-	return &Piece{matrix: *mirror}
+	return &Piece{matrix: *mirrored}
 }
 
 func (piece *Piece) rotate() *Piece {
 	maxX, maxY := piece.matrix.dimensions()
-	rotate := NewMatrix(maxX, maxY)
-	for x := 0; x < maxX; x++ {
-		for y := 0; y < maxY; y++ {
-			(*rotate)[x][y] = (*piece).matrix[x][maxY-y-1]
+	rotated := NewMatrix(maxY, maxX)
+	for x := 0; x < maxY; x++ {
+		for y := 0; y < maxX; y++ {
+			(*rotated)[maxY-x-1][y] = (*piece).matrix[y][x]
 		}
 	}
-	return &Piece{matrix: *rotate}
+	return &Piece{matrix: *rotated}
 }
 
 func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {

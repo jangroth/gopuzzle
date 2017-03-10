@@ -18,6 +18,12 @@ func TestRotate(t *testing.T) {
 		[]int{2, 2}) {
 		t.Error("This matrix doesn't look right")
 	}
+	rotatedPiece2 := rotatedPiece.rotate()
+	if !compare(&rotatedPiece2.matrix,
+		[]int{2, 0, 0},
+		[]int{2, 2, 2}) {
+		t.Error("This matrix doesn't look right")
+	}
 }
 
 func TestMirror(t *testing.T) {
