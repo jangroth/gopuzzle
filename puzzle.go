@@ -33,8 +33,12 @@ func NewMatrix(maxX, maxY int) *Matrix {
 	return &matrix
 }
 
+func (matrix *Matrix) dimensions() (maxX, maxY int) {
+	return len(*matrix), len((*matrix)[0])
+}
+
 func (matrix *Matrix) dump() {
-	maxX, maxY := len(*matrix), len((*matrix)[0])
+	maxX, maxY := matrix.dimensions()
 	for y := 0; y < maxY; y++ {
 		for x := 0; x < maxX; x++ {
 			fmt.Printf("%d ", (*matrix)[x][y])
@@ -62,7 +66,7 @@ func NewPiece(value int, points ...Point) *Piece {
 }
 
 func (piece *Piece) mirror() *Piece {
-	maxX, maxY := len(piece.matrix), len((piece.matrix)[0])
+	maxX, maxY := piece.matrix.dimensions()
 	mirror := NewMatrix(maxX, maxY)
 	for x := 0; x < maxX; x++ {
 		for y := 0; y < maxY; y++ {
@@ -86,8 +90,9 @@ func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {
 
 func (p *Puzzle) nextFreeCell(pnt Point) Point {
 	fmt.Printf("\nnext free cell for: %s\n", pnt)
-	for y := pnt.y; y < len((*p).matrix[0]); y++ {
-		for x := 0; x < len((*p).matrix); x++ {
+	maxX, maxY := (*p).matrix.dimensions()
+	for y := pnt.y; y < maxY; y++ {
+		for x := 0; x < maxX; x++ {
 			fmt.Printf("%s:%d\t", Point{x, y}, (*p).matrix[x][y])
 			if (y == pnt.y && x > pnt.x) || y != pnt.y {
 				if p.matrix[x][y] == 0 {
@@ -106,8 +111,7 @@ func (p Point) String() string {
 // functions
 
 func place(matrix *Matrix, piece *Piece, point Point) (*Matrix, bool) {
-	pieceX := len(((*piece).matrix)[0])
-	pieceY := len((*piece).matrix)
+	pieceX, pieceY := (*piece).matrix.dimensions()
 	for x := 0; x < pieceX; x++ {
 		for y := 0; y < pieceY; y++ {
 			if (*piece).matrix[x][y] != 0 && ((*matrix)[x+point.x][y+point.y] != 0) {
