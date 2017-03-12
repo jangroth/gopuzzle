@@ -5,9 +5,17 @@ import (
 	"testing"
 )
 
+func TestPermutate(t *testing.T) {
+	piece := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
+	permutatedPieces := piece.permutate()
+	if !(len(*permutatedPieces) == 6) {
+		t.Error("Expected 6 different pieces")
+	}
+
+}
+
 func TestRotate(t *testing.T) {
 	piece := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
-	piece.matrix.dump()
 	rotatedPiece := piece.rotate()
 	if piece == rotatedPiece {
 		t.Error("These should be two different objects")
@@ -38,7 +46,6 @@ func TestMirror(t *testing.T) {
 		t.Error("This matrix doesn't look right")
 	}
 	piece = NewPiece(3, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1}, Point{3, 3})
-	piece.matrix.dump()
 	mirroredPiece = piece.mirror()
 	if !compare(&mirroredPiece.matrix,
 		[]int{0, 0, 0, 3},
@@ -92,7 +99,6 @@ func TestPlacement(t *testing.T) {
 
 func TestNewPiece(t *testing.T) {
 	piece := NewPiece(2, Point{1, 0}, Point{1, 1})
-	piece.matrix.dump()
 	if !(len(piece.matrix) == 2 && len(piece.matrix[0]) == 2) {
 		t.Error("Testpiece doesn't have the right size")
 	}
@@ -103,7 +109,6 @@ func TestNewPiece(t *testing.T) {
 
 func TestNextFreeCell(t *testing.T) {
 	puzzle := NewPuzzle(5, 3)
-	puzzle.matrix.dump()
 
 	pnt := puzzle.nextFreeCell(Point{1, 1})
 	if !(pnt.x == 2 && pnt.y == 1) {
@@ -132,7 +137,6 @@ func TestNextFreeCell(t *testing.T) {
 }
 
 func compare(matrix *Matrix, rows ...[]int) bool {
-	matrix.dump()
 	for index, row := range rows {
 		for x := 0; x < len(row); x++ {
 			fmt.Printf("%d:m%d-r%d \t", x, (*matrix)[x][index], row[x])

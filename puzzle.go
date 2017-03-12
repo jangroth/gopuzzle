@@ -87,6 +87,10 @@ func (piece *Piece) rotate() *Piece {
 	return &Piece{matrix: *rotated}
 }
 
+func (piece *Piece) permutate() *[]Piece {
+	return nil
+}
+
 func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {
 	matrix := NewMatrix(maxX, maxY)
 	for x := 0; x < maxX; x++ {
