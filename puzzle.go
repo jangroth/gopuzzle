@@ -87,8 +87,17 @@ func (piece *Piece) rotate() *Piece {
 	return &Piece{matrix: *rotated}
 }
 
-func (piece *Piece) permutate() *[]Piece {
-	return nil
+func (piece *Piece) permutate() []*Piece {
+	var result []*Piece
+	result = append(result, piece)
+	for i := 0; i < 7; i++ {
+		if i == 3 {
+			piece = piece.mirror()
+		}
+		piece = piece.rotate()
+		result = append(result, piece)
+	}
+	return result
 }
 
 func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {

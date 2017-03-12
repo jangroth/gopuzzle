@@ -1,15 +1,17 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 )
 
 func TestPermutate(t *testing.T) {
 	piece := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
 	permutatedPieces := piece.permutate()
-	if !(len(*permutatedPieces) == 6) {
-		t.Error("Expected 6 different pieces")
+	for _, value := range permutatedPieces {
+		value.matrix.dump()
+	}
+	if !(len(permutatedPieces) == 8) {
+		t.Error("Expected 8 different pieces")
 	}
 
 }
@@ -139,12 +141,10 @@ func TestNextFreeCell(t *testing.T) {
 func compare(matrix *Matrix, rows ...[]int) bool {
 	for index, row := range rows {
 		for x := 0; x < len(row); x++ {
-			fmt.Printf("%d:m%d-r%d \t", x, (*matrix)[x][index], row[x])
 			if (*matrix)[x][index] != row[x] {
 				return false
 			}
 		}
-		fmt.Println()
 	}
 	return true
 }
