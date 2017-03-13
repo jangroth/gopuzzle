@@ -7,9 +7,6 @@ import (
 func TestPermutate(t *testing.T) {
 	piece := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
 	permutatedPieces := piece.permutate()
-	for _, value := range permutatedPieces {
-		value.matrix.dump()
-	}
 	if !(len(permutatedPieces) == 8) {
 		t.Error("Expected 8 different pieces")
 	}

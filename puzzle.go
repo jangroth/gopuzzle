@@ -37,15 +37,21 @@ func (matrix *Matrix) dimensions() (maxX, maxY int) {
 	return len(*matrix), len((*matrix)[0])
 }
 
-func (matrix *Matrix) dump() {
+func (matrix *Matrix) toString() string {
 	maxX, maxY := matrix.dimensions()
+	var result string
 	for y := 0; y < maxY; y++ {
 		for x := 0; x < maxX; x++ {
-			fmt.Printf("%d ", (*matrix)[x][y])
+			result += fmt.Sprintf("%d ", (*matrix)[x][y])
 		}
-		fmt.Println()
+		result += "\n"
 	}
-	fmt.Printf("size: x:%d, y:%d\n", maxX, maxY)
+	return result
+}
+
+func (matrix *Matrix) dump() {
+	maxX, maxY := matrix.dimensions()
+	fmt.Printf("%ssize: x:%d, y:%d\n", matrix.toString(), maxX, maxY)
 }
 
 func NewPiece(value int, points ...Point) *Piece {
@@ -88,16 +94,21 @@ func (piece *Piece) rotate() *Piece {
 }
 
 func (piece *Piece) permutate() []*Piece {
-	var result []*Piece
-	result = append(result, piece)
+	resultMap := make(map[string]*Piece)
+	resultMap[piece.matrix.toString()] = piece
 	for i := 0; i < 7; i++ {
 		if i == 3 {
 			piece = piece.mirror()
 		}
 		piece = piece.rotate()
-		result = append(result, piece)
+		resultMap[piece.matrix.toString()] = piece
 	}
-	return result
+	var results []*Piece
+	for _, result := range resultMap {
+		results = append(results, result)
+	}
+
+	return results
 }
 
 func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {
