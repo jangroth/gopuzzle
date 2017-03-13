@@ -142,6 +142,10 @@ func (p Point) String() string {
 	return fmt.Sprintf("(%d,%d)", p.x, p.y)
 }
 
+func (p *Puzzle) Solve() (success bool) {
+	return false
+}
+
 // functions
 
 func place(matrix *Matrix, piece *Piece, point Point) (modified_matrix *Matrix, success bool) {
