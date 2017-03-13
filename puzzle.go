@@ -107,7 +107,6 @@ func (piece *Piece) permutate() []*Piece {
 	for _, result := range resultMap {
 		results = append(results, result)
 	}
-
 	return results
 }
 
