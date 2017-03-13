@@ -13,7 +13,11 @@ func TestPermutate(t *testing.T) {
 	if !(len(permutatedPieces) == 8) {
 		t.Error("Expected 8 different pieces")
 	}
-
+	piece = NewPiece(2, Point{0, 0}, Point{1, 0}, Point{1, 1})
+	permutatedPieces = piece.permutate()
+	if !(len(permutatedPieces) == 4) {
+		t.Error("Expected 4 different pieces")
+	}
 }
 
 func TestRotate(t *testing.T) {
