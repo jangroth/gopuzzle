@@ -18,8 +18,9 @@ type Piece struct {
 }
 
 type Puzzle struct {
-	matrix Matrix
-	pieces []Piece
+	matrix           Matrix
+	pieces           []Piece
+	permutatedPieces [][]*Piece
 }
 
 // methods
@@ -119,10 +120,15 @@ func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {
 			}
 		}
 	}
-	return &Puzzle{matrix: *matrix, pieces: pieces}
+	var permutatedPieces [][]*Piece
+	for _, piece := range pieces {
+		permutatedPieces = append(permutatedPieces, piece.permutate())
+	}
+
+	return &Puzzle{matrix: *matrix, pieces: pieces, permutatedPieces: permutatedPieces}
 }
 
-func (p *Puzzle) nextFreeCell(pnt Point) Point {
+func (p *Puzzle) nextFreeCell(pnt Point) (nextPoint Point, ok bool) {
 	fmt.Printf("\nnext free cell for: %s\n", pnt)
 	maxX, maxY := (*p).matrix.dimensions()
 	for y := pnt.y; y < maxY; y++ {
@@ -130,12 +136,12 @@ func (p *Puzzle) nextFreeCell(pnt Point) Point {
 			fmt.Printf("%s:%d\t", Point{x, y}, (*p).matrix[x][y])
 			if (y == pnt.y && x > pnt.x) || y != pnt.y {
 				if p.matrix[x][y] == 0 {
-					return Point{x, y}
+					return Point{x, y}, true
 				}
 			}
 		}
 	}
-	return Point{-1, -1}
+	return nextPoint, false
 }
 
 func (p Point) String() string {
@@ -143,6 +149,11 @@ func (p Point) String() string {
 }
 
 func (p *Puzzle) Solve() (success bool) {
+	//tries_exceeded := false
+	//startingPoint := Point{0, 0}
+	//for !tries_exceeded {
+	//	//currentPoint := p.nextFreeCell(startingPoint)
+	//}
 	return false
 }
 
