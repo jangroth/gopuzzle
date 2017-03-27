@@ -19,7 +19,6 @@ type Piece struct {
 
 type Puzzle struct {
 	matrix           Matrix
-	pieces           []Piece // TODO: remove
 	permutatedPieces [][]*Piece
 }
 
@@ -125,7 +124,7 @@ func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {
 		permutatedPieces = append(permutatedPieces, piece.permutate())
 	}
 
-	return &Puzzle{matrix: *matrix, pieces: pieces, permutatedPieces: permutatedPieces}
+	return &Puzzle{matrix: *matrix, permutatedPieces: permutatedPieces}
 }
 
 // TODO: don't really need this
