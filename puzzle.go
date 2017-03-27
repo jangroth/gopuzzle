@@ -54,6 +54,18 @@ func (matrix *Matrix) dump() {
 	fmt.Printf("%ssize: x:%d, y:%d\n", matrix.toString(), maxX, maxY)
 }
 
+func (matrix *Matrix) nextCell(pnt Point) (nextPoint Point, ok bool) {
+	maxX, maxY := (*matrix).dimensions()
+	switch {
+	case pnt.x < maxX-1:
+		return Point{pnt.x + 1, pnt.y}, true
+	case pnt.x == maxX-1 && pnt.y < maxY-1:
+		return Point{0, pnt.y + 1}, true
+	default:
+		return nextPoint, false
+	}
+}
+
 func NewPiece(value int, points ...Point) *Piece {
 	maxX, maxY := 0, 0
 	for _, val := range points {
@@ -125,23 +137,6 @@ func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {
 	}
 
 	return &Puzzle{matrix: *matrix, permutatedPieces: permutatedPieces}
-}
-
-// TODO: don't really need this
-func (p *Puzzle) nextFreeCell(pnt Point) (nextPoint Point, ok bool) {
-	fmt.Printf("\nnext free cell for: %s\n", pnt)
-	maxX, maxY := (*p).matrix.dimensions()
-	for y := pnt.y; y < maxY; y++ {
-		for x := 0; x < maxX; x++ {
-			fmt.Printf("%s:%d\t", Point{x, y}, (*p).matrix[x][y])
-			if (y == pnt.y && x > pnt.x) || y != pnt.y {
-				if p.matrix[x][y] == 0 {
-					return Point{x, y}, true
-				}
-			}
-		}
-	}
-	return nextPoint, false
 }
 
 func (p Point) String() string {

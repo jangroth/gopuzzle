@@ -115,35 +115,31 @@ func TestNewPiece(t *testing.T) {
 	}
 }
 
-func TestNextFreeCell(t *testing.T) {
+func TestNextCell(t *testing.T) {
 	puzzle := NewPuzzle(5, 3)
+	puzzle.matrix.dump()
 
-	pnt, ok := puzzle.nextFreeCell(Point{1, 1})
+	pnt, ok := puzzle.matrix.nextCell(Point{1, 1})
 	if !ok {
 		t.Error("This should have been ok")
 	}
 	if !(pnt.x == 2 && pnt.y == 1) {
-		t.Errorf("Failed - (1, 1) returned %s instead of (2,1)", pnt)
+		t.Errorf("This doesn't look like the next free cell: ", pnt)
 	}
 
-	pnt, _ = puzzle.nextFreeCell(Point{0, 0})
-	if !(pnt.x == 1 && pnt.y == 1) {
-		t.Errorf("Failed - (0, 0) returned %s instead of (1,1)", pnt)
+	pnt, _ = puzzle.matrix.nextCell(Point{0, 0})
+	if !(pnt.x == 1 && pnt.y == 0) {
+		t.Errorf("This doesn't look like the next free cell: ", pnt)
 	}
 
-	pnt, _ = puzzle.nextFreeCell(Point{2, 1})
-	if !(pnt.x == 3 && pnt.y == 1) {
-		t.Errorf("Failed - (2, 1) returned %s instead of (3,1)", pnt)
+	pnt, _ = puzzle.matrix.nextCell(Point{4, 0})
+	if !(pnt.x == 0 && pnt.y == 1) {
+		t.Errorf("This doesn't look like the next free cell: ", pnt)
 	}
 
-	_, ok = puzzle.nextFreeCell(Point{4, 1})
+	_, ok = puzzle.matrix.nextCell(Point{4, 2})
 	if ok {
 		t.Errorf("Failed, this call should not be okay", pnt)
-	}
-
-	pnt, _ = puzzle.nextFreeCell(Point{2, 0})
-	if !(pnt.x == 1 && pnt.y == 1) {
-		t.Errorf("Failed - (2, 0) returned %s instead of (1,1)", pnt)
 	}
 }
 
