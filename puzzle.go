@@ -19,7 +19,7 @@ type Piece struct {
 
 type Puzzle struct {
 	matrix           Matrix
-	pieces           []Piece
+	pieces           []Piece // TODO: remove
 	permutatedPieces [][]*Piece
 }
 
@@ -128,6 +128,7 @@ func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {
 	return &Puzzle{matrix: *matrix, pieces: pieces, permutatedPieces: permutatedPieces}
 }
 
+// TODO: don't really need this
 func (p *Puzzle) nextFreeCell(pnt Point) (nextPoint Point, ok bool) {
 	fmt.Printf("\nnext free cell for: %s\n", pnt)
 	maxX, maxY := (*p).matrix.dimensions()
@@ -148,13 +149,22 @@ func (p Point) String() string {
 	return fmt.Sprintf("(%d,%d)", p.x, p.y)
 }
 
-func (p *Puzzle) Solve() (success bool) {
-	//tries_exceeded := false
-	//startingPoint := Point{0, 0}
-	//for !tries_exceeded {
-	//	//currentPoint := p.nextFreeCell(startingPoint)
-	//}
-	return false
+func (p *Puzzle) Solve(startingPnt Point) (success bool) {
+	//	if len(permutatedPieces == 0) {
+	//		// solved
+	//		return true
+	//	} else {
+	//		//  not solved yet. Try remaining pieces
+	//		for _, permutatedPiece := range p.permutatedPieces {
+	//			// place piece in matrix, at starting point
+	//			// if couldPlace
+	//			//   remove permutatedPiece from puzzle
+	//			//   solve new puzzle, old starting point
+	//		}
+	//		// if has more points to try
+	//		//   solve old puzzle, new starting point
+	//	}
+	return true
 }
 
 // functions
