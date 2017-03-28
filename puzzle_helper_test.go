@@ -6,14 +6,31 @@ import (
 
 func TestRemovePermutatedPiece(t *testing.T) {
 	p1 := NewPiece(2, Point{0, 0})
-	//	p2 := NewPiece(3, Point{0, 0})
-	//	p3 := NewPiece(4, Point{0, 0})
+	p2 := NewPiece(3, Point{0, 0})
+	p3 := NewPiece(4, Point{0, 0})
 	puzzle := NewPuzzle(1, 1, *p1)
 	puzzle.removePermuatedPiece(0)
 	if !(len(puzzle.permutatedPieces) == 0) {
 		t.Error("Expected this to be gone")
 	}
-
+	puzzle = NewPuzzle(1, 1, *p1, *p2, *p3)
+	puzzle.removePermuatedPiece(0)
+	if !(puzzle.permutatedPieces[0][0].matrix[0][0] == 3 &&
+		puzzle.permutatedPieces[1][0].matrix[0][0] == 4) {
+		t.Error("Expected this to be a different piece")
+	}
+	puzzle = NewPuzzle(1, 1, *p1, *p2, *p3)
+	puzzle.removePermuatedPiece(1)
+	if !(puzzle.permutatedPieces[0][0].matrix[0][0] == 2 &&
+		puzzle.permutatedPieces[1][0].matrix[0][0] == 4) {
+		t.Error("Expected this to be a different piece")
+	}
+	puzzle = NewPuzzle(1, 1, *p1, *p2, *p3)
+	puzzle.removePermuatedPiece(2)
+	if !(puzzle.permutatedPieces[0][0].matrix[0][0] == 2 &&
+		puzzle.permutatedPieces[1][0].matrix[0][0] == 3) {
+		t.Error("Expected this to be a different piece")
+	}
 }
 
 func TestPermutate(t *testing.T) {

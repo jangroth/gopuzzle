@@ -144,7 +144,7 @@ func (p Point) String() string {
 }
 
 func (p *Puzzle) removePermuatedPiece(index int) {
-	// TODO
+	p.permutatedPieces = append(p.permutatedPieces[:index], p.permutatedPieces[index+1:]...)
 }
 
 func (p Puzzle) Solve(startingPnt Point) (success bool) {
