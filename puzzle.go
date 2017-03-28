@@ -143,21 +143,32 @@ func (p Point) String() string {
 	return fmt.Sprintf("(%d,%d)", p.x, p.y)
 }
 
-func (p *Puzzle) Solve(startingPnt Point) (success bool) {
-	//	if len(permutatedPieces == 0) {
-	//		// solved
-	//		return true
-	//	} else {
-	//		//  not solved yet. Try remaining pieces
-	//		for _, permutatedPiece := range p.permutatedPieces {
-	//			// place piece in matrix, at starting point
-	//			// if couldPlace
-	//			//   remove permutatedPiece from puzzle
-	//			//   solve new puzzle, old starting point
-	//		}
-	//		// if has more points to try
-	//		//   solve old puzzle, new starting point
-	//	}
+func (p *Puzzle) removePermuatedPiece(index int) {
+	// TODO
+}
+
+func (p Puzzle) Solve(startingPnt Point) (success bool) {
+	if len(p.permutatedPieces) == 0 {
+		// solved
+		return true
+	} else {
+		//  not solved yet. Try remaining pieces
+		for pp_index, permutatedPiece := range p.permutatedPieces {
+			for _, piece := range permutatedPiece {
+				var ok bool
+				p.matrix, ok = place(&p.matrix, piece, startingPnt)
+				if ok {
+					p.removePermuatedPiece(pp_index)
+					p.Solve(startingPnt)
+					break
+				}
+			}
+		}
+		nextPoint, ok := p.matrix.nextCell(startingPnt)
+		if ok {
+			p.Solve(nextPoint)
+		}
+	}
 	return true
 }
 
