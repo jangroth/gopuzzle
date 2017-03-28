@@ -155,9 +155,9 @@ func (p Puzzle) Solve(startingPnt Point) (success bool) {
 		//  not solved yet. Try remaining pieces
 		for pp_index, permutatedPiece := range p.permutatedPieces {
 			for _, piece := range permutatedPiece {
-				var ok bool
-				p.matrix, ok = place(&p.matrix, piece, startingPnt)
+				matrix, ok := place(&p.matrix, piece, startingPnt)
 				if ok {
+					p.matrix = *matrix
 					p.removePermuatedPiece(pp_index)
 					p.Solve(startingPnt)
 					break
