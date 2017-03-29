@@ -66,6 +66,25 @@ func (matrix *Matrix) nextCell(pnt Point) (nextPoint Point, ok bool) {
 	}
 }
 
+func (matrix *Matrix) place(piece *Piece, point Point) (success bool) {
+	pieceX, pieceY := (*piece).matrix.dimensions()
+	for x := 0; x < pieceX; x++ {
+		for y := 0; y < pieceY; y++ {
+			if (*piece).matrix[x][y] != 0 && ((*matrix)[x+point.x][y+point.y] != 0) {
+				return false
+			}
+		}
+	}
+	for x := 0; x < pieceX; x++ {
+		for y := 0; y < pieceY; y++ {
+			if (*piece).matrix[x][y] != 0 {
+				(*matrix)[x+point.x][y+point.y] = (*piece).matrix[x][y]
+			}
+		}
+	}
+	return true
+}
+
 func NewPiece(value int, points ...Point) *Piece {
 	maxX, maxY := 0, 0
 	for _, val := range points {
@@ -155,9 +174,7 @@ func (p Puzzle) Solve(startingPnt Point) (success bool) {
 		//  not solved yet. Try remaining pieces
 		for pp_index, permutatedPiece := range p.permutatedPieces {
 			for _, piece := range permutatedPiece {
-				matrix, ok := place(&p.matrix, piece, startingPnt)
-				if ok {
-					p.matrix = *matrix
+				if p.matrix.place(piece, startingPnt) {
 					p.removePermuatedPiece(pp_index)
 					p.Solve(startingPnt)
 					break
@@ -173,25 +190,6 @@ func (p Puzzle) Solve(startingPnt Point) (success bool) {
 }
 
 // functions
-
-func place(matrix *Matrix, piece *Piece, point Point) (modified_matrix *Matrix, success bool) {
-	pieceX, pieceY := (*piece).matrix.dimensions()
-	for x := 0; x < pieceX; x++ {
-		for y := 0; y < pieceY; y++ {
-			if (*piece).matrix[x][y] != 0 && ((*matrix)[x+point.x][y+point.y] != 0) {
-				return matrix, false
-			}
-		}
-	}
-	for x := 0; x < pieceX; x++ {
-		for y := 0; y < pieceY; y++ {
-			if (*piece).matrix[x][y] != 0 {
-				(*matrix)[x+point.x][y+point.y] = (*piece).matrix[x][y]
-			}
-		}
-	}
-	return matrix, true
-}
 
 func main() {
 	puzzle := NewPuzzle(15, 10)

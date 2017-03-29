@@ -94,25 +94,22 @@ func TestMirror(t *testing.T) {
 }
 
 func TestPlacement(t *testing.T) {
-	var matrix *Matrix
 	puzzle := NewPuzzle(5, 3)
 	piece := NewPiece(2, Point{1, 0}, Point{1, 1})
-	matrix, success := place(&puzzle.matrix, piece, Point{1, 1})
-	if success {
+	if puzzle.matrix.place(piece, Point{1, 1}) {
 		t.Error("This piece should not fit into the matrix")
 	}
-	if !compare(matrix,
+	if !compare(&puzzle.matrix,
 		[]int{1, 1, 1, 1, 1},
 		[]int{1, 0, 0, 0, 1},
 		[]int{1, 1, 1, 1, 1}) {
 		t.Error("This matrix doesn't look right")
 	}
 	puzzle = NewPuzzle(5, 4)
-	matrix, success = place(&puzzle.matrix, piece, Point{1, 1})
-	if !success {
+	if !puzzle.matrix.place(piece, Point{1, 1}) {
 		t.Error("This piece should fit into the matrix")
 	}
-	if !compare(matrix,
+	if !compare(&puzzle.matrix,
 		[]int{1, 1, 1, 1, 1},
 		[]int{1, 0, 2, 0, 1},
 		[]int{1, 0, 2, 0, 1},
@@ -122,9 +119,9 @@ func TestPlacement(t *testing.T) {
 	pieceX1 := NewPiece(2, Point{0, 0}, Point{1, 1})
 	pieceX2 := NewPiece(3, Point{0, 1}, Point{1, 0})
 	puzzle = NewPuzzle(4, 4)
-	matrix, _ = place(&puzzle.matrix, pieceX1, Point{1, 1})
-	matrix, _ = place(&puzzle.matrix, pieceX2, Point{1, 1})
-	if !compare(matrix,
+	puzzle.matrix.place(pieceX1, Point{1, 1})
+	puzzle.matrix.place(pieceX2, Point{1, 1})
+	if !compare(&puzzle.matrix,
 		[]int{1, 1, 1, 1},
 		[]int{1, 2, 3, 1},
 		[]int{1, 3, 2, 1},
