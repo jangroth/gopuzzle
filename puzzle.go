@@ -166,6 +166,15 @@ func (p *Puzzle) removePermuatedPiece(index int) {
 	p.permutatedPieces = append(p.permutatedPieces[:index], p.permutatedPieces[index+1:]...)
 }
 
+func (p *Puzzle) dump() {
+	fmt.Printf("Dump puzzle (%d):\n", &p)
+	p.matrix.dump()
+	for index, val := range p.permutatedPieces {
+		fmt.Printf("Piece #%d (%d permutations)\n", index, len(val))
+		val[0].matrix.dump()
+	}
+}
+
 // functions
 
 func Solve(p Puzzle, startingPnt Point) (success bool) {
