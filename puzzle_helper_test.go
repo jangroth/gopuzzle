@@ -128,7 +128,6 @@ func TestPlacement(t *testing.T) {
 		[]int{1, 1, 1, 1}) {
 		t.Error("This matrix doesn't look right")
 	}
-
 }
 
 func TestNewPiece(t *testing.T) {

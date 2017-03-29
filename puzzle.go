@@ -166,7 +166,9 @@ func (p *Puzzle) removePermuatedPiece(index int) {
 	p.permutatedPieces = append(p.permutatedPieces[:index], p.permutatedPieces[index+1:]...)
 }
 
-func (p Puzzle) Solve(startingPnt Point) (success bool) {
+// functions
+
+func Solve(p Puzzle, startingPnt Point) (success bool) {
 	if len(p.permutatedPieces) == 0 {
 		// solved
 		return true
@@ -176,20 +178,18 @@ func (p Puzzle) Solve(startingPnt Point) (success bool) {
 			for _, piece := range permutatedPiece {
 				if p.matrix.place(piece, startingPnt) {
 					p.removePermuatedPiece(pp_index)
-					p.Solve(startingPnt)
+					Solve(p, startingPnt)
 					break
 				}
 			}
 		}
 		nextPoint, ok := p.matrix.nextCell(startingPnt)
 		if ok {
-			p.Solve(nextPoint)
+			Solve(p, nextPoint)
 		}
 	}
 	return true
 }
-
-// functions
 
 func main() {
 	puzzle := NewPuzzle(15, 10)
