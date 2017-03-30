@@ -68,6 +68,7 @@ func (matrix *Matrix) nextCell(pnt Point) (nextPoint Point, ok bool) {
 
 func (matrix *Matrix) place(piece *Piece, point Point) (success bool) {
 	pieceX, pieceY := (*piece).matrix.dimensions()
+	// TODO: piece at point can be larger than matrix dimensions
 	for x := 0; x < pieceX; x++ {
 		for y := 0; y < pieceY; y++ {
 			if (*piece).matrix[x][y] != 0 && ((*matrix)[x+point.x][y+point.y] != 0) {
