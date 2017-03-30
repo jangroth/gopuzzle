@@ -195,7 +195,7 @@ func Solve(p Puzzle, startingPnt Point) (success bool) {
 				if p.matrix.place(piece, startingPnt) {
 					fmt.Printf("Managed to place piece #%d, %d. permutation!\n", pp_index, p_index)
 					p.removePermuatedPiece(pp_index)
-					found_solution := Solve(p, startingPnt)
+					found_solution := Solve(p, Point{0, 0})
 					if found_solution {
 						// found solution, no need to try anything else
 						return true
