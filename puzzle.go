@@ -141,7 +141,7 @@ func (piece *Piece) permutate() []*Piece {
 	return results
 }
 
-func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {
+func NewPuzzle(maxX, maxY int, pieces ...Piece) Puzzle {
 	matrix := NewMatrix(maxX, maxY)
 	for x := 0; x < maxX; x++ {
 		for y := 0; y < maxY; y++ {
@@ -155,7 +155,7 @@ func NewPuzzle(maxX, maxY int, pieces ...Piece) *Puzzle {
 		permutatedPieces = append(permutatedPieces, piece.permutate())
 	}
 
-	return &Puzzle{matrix: *matrix, permutatedPieces: permutatedPieces}
+	return Puzzle{matrix: *matrix, permutatedPieces: permutatedPieces}
 }
 
 func (p Point) String() string {
@@ -171,33 +171,42 @@ func (p *Puzzle) dump() {
 	p.matrix.dump()
 	for index, val := range p.permutatedPieces {
 		fmt.Printf("Piece #%d (%d permutations)\n", index, len(val))
-		val[0].matrix.dump()
+		//val[0].matrix.dump()
 	}
 }
 
 // functions
 
 func Solve(p Puzzle, startingPnt Point) (success bool) {
+	fmt.Printf("---> Call for %s: ", startingPnt)
+	p.dump()
 	if len(p.permutatedPieces) == 0 {
+		fmt.Println("Solved!")
 		// solved
 		return true
 	} else {
 		//  not solved yet. Try remaining pieces
 		for pp_index, permutatedPiece := range p.permutatedPieces {
-			for _, piece := range permutatedPiece {
+			for p_index, piece := range permutatedPiece {
 				if p.matrix.place(piece, startingPnt) {
+					fmt.Printf("Managed to place piece #%d, %d. permutation!\n", pp_index, p_index)
 					p.removePermuatedPiece(pp_index)
-					Solve(p, startingPnt)
-					break
+					found_solution := Solve(p, startingPnt)
+					if found_solution {
+						// found solution, no need to try anything else
+						return true
+					} else {
+						break
+					}
 				}
 			}
 		}
-		nextPoint, ok := p.matrix.nextCell(startingPnt)
-		if ok {
-			Solve(p, nextPoint)
+		nextPoint, hasNext := p.matrix.nextCell(startingPnt)
+		if hasNext {
+			return Solve(p, nextPoint)
 		}
 	}
-	return true
+	return false
 }
 
 func main() {
