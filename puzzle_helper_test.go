@@ -105,6 +105,11 @@ func TestPlacement(t *testing.T) {
 		[]int{1, 1, 1, 1, 1}) {
 		t.Error("This matrix doesn't look right")
 	}
+	piece = NewPiece(2, Point{1, 0}, Point{1, 1})
+	puzzle = NewPuzzle(4, 4)
+	if puzzle.matrix.place(piece, Point{3, 3}) {
+		t.Error("This piece should not fit into the matrix")
+	}
 	puzzle = NewPuzzle(5, 4)
 	if !puzzle.matrix.place(piece, Point{1, 1}) {
 		t.Error("This piece should fit into the matrix")
