@@ -167,7 +167,7 @@ func (p *Puzzle) removePermuatedPiece(index int) {
 }
 
 func (p *Puzzle) dump() {
-	fmt.Printf("Dump puzzle (%d):\n", &p)
+	fmt.Printf("Dump puzzle (%p):\n", &p)
 	p.matrix.dump()
 	for index, val := range p.permutatedPieces {
 		fmt.Printf("Piece #%d (%d permutations)\n", index, len(val))

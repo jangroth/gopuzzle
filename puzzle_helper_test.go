@@ -142,7 +142,6 @@ func TestNewPiece(t *testing.T) {
 
 func TestNextCell(t *testing.T) {
 	puzzle := NewPuzzle(5, 3)
-	puzzle.matrix.dump()
 
 	pnt, ok := puzzle.matrix.nextCell(Point{1, 1})
 	if !ok {
