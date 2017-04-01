@@ -168,6 +168,41 @@ func simpleBorder(x, y, maxX, maxY int) bool {
 	return (y == 0 || y == maxY-1) || (x == 0 || x == maxX-1)
 }
 
+func niftyFiftyBorder(x, y, maxX, maxY int) bool {
+	if maxX != 21 || maxY != 21 {
+		return false
+	} else {
+		var result bool
+		switch {
+		case y == 1:
+			result = x >= 8
+		case y == 2 || y == 3:
+			result = x >= 9
+		case y == 4 || y == 5:
+			result = x >= 12
+		case y == 6:
+			result = x >= 15
+		case y == 7 || y == 8 || y == 9:
+			result = x >= 16
+		case y == 10:
+			result = x <= 2 || x >= 17
+		case y == 11:
+			result = x <= 5 || x >= 17
+		case y == 12 || y == 13:
+			result = x <= 5
+		case y == 14:
+			result = x <= 6
+		case y == 15 || y == 16:
+			result = x <= 7
+		case y == 17 || y == 18:
+			result = x <= 9
+		case y == 19:
+			result = x <= 10
+		}
+		return result || simpleBorder(x, y, maxX, maxY)
+	}
+}
+
 func NewPuzzle(maxX, maxY int, hasBorder Borderfun, pieces ...Piece) Puzzle {
 	matrix := NewMatrix(maxX, maxY)
 	for x := 0; x < maxX; x++ {
