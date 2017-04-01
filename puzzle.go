@@ -42,7 +42,12 @@ func (matrix *Matrix) toString() string {
 	var result string
 	for y := 0; y < maxY; y++ {
 		for x := 0; x < maxX; x++ {
-			result += fmt.Sprintf("%d ", (*matrix)[x][y])
+			val := (*matrix)[x][y]
+			if val != 0 {
+				result += fmt.Sprintf("%d ", (*matrix)[x][y])
+			} else {
+				result += fmt.Sprintf("_ ")
+			}
 		}
 		result += "\n"
 	}
