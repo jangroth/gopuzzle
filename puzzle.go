@@ -7,7 +7,7 @@ import (
 
 // types
 
-type Borderfun func(int, int, int, int) bool
+type Borderfun func(x, y, maxX, maxY int) (hasBorder bool)
 
 type Point struct {
 	x, y int
@@ -22,6 +22,7 @@ type Piece struct {
 type Puzzle struct {
 	matrix           Matrix
 	permutatedPieces [][]*Piece
+	solution         map[int]*Point
 }
 
 // methods
@@ -73,7 +74,7 @@ func (matrix *Matrix) nextCell(pnt Point) (nextPoint Point, ok bool) {
 	}
 }
 
-func (matrix *Matrix) place(piece *Piece, point Point) (success bool) {
+func (matrix *Matrix) testAndPlace(piece *Piece, point Point) (success bool) {
 	matrixX, matrixY := (*matrix).dimensions()
 	pieceX, pieceY := (*piece).matrix.dimensions()
 	if point.x+pieceX > matrixX || point.y+pieceY > matrixY {
@@ -94,6 +95,17 @@ func (matrix *Matrix) place(piece *Piece, point Point) (success bool) {
 		}
 	}
 	return true
+}
+
+func (matrix *Matrix) remove(piece *Piece, point Point) {
+	pieceX, pieceY := (*piece).matrix.dimensions()
+	for x := 0; x < pieceX; x++ {
+		for y := 0; y < pieceY; y++ {
+			if (*piece).matrix[x][y] != 0 {
+				(*matrix)[x+point.x][y+point.y] = 0
+			}
+		}
+	}
 }
 
 func NewPiece(value int, points ...Point) *Piece {
@@ -169,8 +181,7 @@ func NewPuzzle(maxX, maxY int, hasBorder Borderfun, pieces ...Piece) Puzzle {
 	for _, piece := range pieces {
 		permutatedPieces = append(permutatedPieces, piece.permutate())
 	}
-
-	return Puzzle{matrix: *matrix, permutatedPieces: permutatedPieces}
+	return Puzzle{matrix: *matrix, permutatedPieces: permutatedPieces, solution: make(map[int]*Point)}
 }
 
 func (p Point) String() string {
@@ -195,7 +206,7 @@ func (p *Puzzle) dump() {
 func Solve(p Puzzle, startingPnt Point) (success bool) {
 	fmt.Printf("---> Call for %s: ", startingPnt)
 	p.dump()
-	if len(p.permutatedPieces) == 0 {
+	if len(p.permutatedPieces) == len(p.solution) {
 		fmt.Println("Solved!")
 		// solved
 		return true
@@ -203,15 +214,17 @@ func Solve(p Puzzle, startingPnt Point) (success bool) {
 		//  not solved yet. Try remaining pieces
 		for pp_index, permutatedPiece := range p.permutatedPieces {
 			for p_index, piece := range permutatedPiece {
-				if p.matrix.place(piece, startingPnt) {
+				if p.matrix.testAndPlace(piece, startingPnt) {
 					fmt.Printf("Managed to place piece #%d, %d. permutation!\n", pp_index, p_index)
-					p.removePermuatedPiece(pp_index)
+					p.solution[pp_index] = &startingPnt
 					found_solution := Solve(p, Point{0, 0})
 					if found_solution {
 						// found solution, no need to try anything else
 						return true
 					} else {
-						break
+						// no solution found, remove and try next permutation / piece
+						delete(p.solution, pp_index)
+						p.matrix.remove(piece, startingPnt)
 					}
 				}
 			}
