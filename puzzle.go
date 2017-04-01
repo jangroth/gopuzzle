@@ -7,6 +7,8 @@ import (
 
 // types
 
+type Borderfun func(int, int, int, int) bool
+
 type Point struct {
 	x, y int
 }
@@ -150,11 +152,15 @@ func (piece *Piece) permutate() []*Piece {
 	return results
 }
 
-func NewPuzzle(maxX, maxY int, pieces ...Piece) Puzzle {
+func simpleBorder(x, y, maxX, maxY int) bool {
+	return (y == 0 || y == maxY-1) || (x == 0 || x == maxX-1)
+}
+
+func NewPuzzle(maxX, maxY int, hasBorder Borderfun, pieces ...Piece) Puzzle {
 	matrix := NewMatrix(maxX, maxY)
 	for x := 0; x < maxX; x++ {
 		for y := 0; y < maxY; y++ {
-			if (y == 0 || y == maxY-1) || (x == 0 || x == maxX-1) {
+			if hasBorder(x, y, maxX, maxY) {
 				(*matrix)[x][y] = 1
 			}
 		}
@@ -219,6 +225,5 @@ func Solve(p Puzzle, startingPnt Point) (success bool) {
 }
 
 func main() {
-	puzzle := NewPuzzle(15, 10)
-	puzzle.matrix.dump()
+	//
 }

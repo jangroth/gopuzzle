@@ -8,24 +8,24 @@ func TestRemovePermutatedPiece(t *testing.T) {
 	p1 := NewPiece(2, Point{0, 0})
 	p2 := NewPiece(3, Point{0, 0})
 	p3 := NewPiece(4, Point{0, 0})
-	puzzle := NewPuzzle(1, 1, *p1)
+	puzzle := NewPuzzle(1, 1, simpleBorder, *p1)
 	puzzle.removePermuatedPiece(0)
 	if !(len(puzzle.permutatedPieces) == 0) {
 		t.Error("Expected this to be gone")
 	}
-	puzzle = NewPuzzle(1, 1, *p1, *p2, *p3)
+	puzzle = NewPuzzle(1, 1, simpleBorder, *p1, *p2, *p3)
 	puzzle.removePermuatedPiece(0)
 	if !(puzzle.permutatedPieces[0][0].matrix[0][0] == 3 &&
 		puzzle.permutatedPieces[1][0].matrix[0][0] == 4) {
 		t.Error("Expected this to be a different piece")
 	}
-	puzzle = NewPuzzle(1, 1, *p1, *p2, *p3)
+	puzzle = NewPuzzle(1, 1, simpleBorder, *p1, *p2, *p3)
 	puzzle.removePermuatedPiece(1)
 	if !(puzzle.permutatedPieces[0][0].matrix[0][0] == 2 &&
 		puzzle.permutatedPieces[1][0].matrix[0][0] == 4) {
 		t.Error("Expected this to be a different piece")
 	}
-	puzzle = NewPuzzle(1, 1, *p1, *p2, *p3)
+	puzzle = NewPuzzle(1, 1, simpleBorder, *p1, *p2, *p3)
 	puzzle.removePermuatedPiece(2)
 	if !(puzzle.permutatedPieces[0][0].matrix[0][0] == 2 &&
 		puzzle.permutatedPieces[1][0].matrix[0][0] == 3) {
@@ -94,7 +94,7 @@ func TestMirror(t *testing.T) {
 }
 
 func TestPlacement(t *testing.T) {
-	puzzle := NewPuzzle(5, 3)
+	puzzle := NewPuzzle(5, 3, simpleBorder)
 	piece := NewPiece(2, Point{1, 0}, Point{1, 1})
 	if puzzle.matrix.place(piece, Point{1, 1}) {
 		t.Error("This piece should not fit into the matrix")
@@ -106,11 +106,11 @@ func TestPlacement(t *testing.T) {
 		t.Error("This matrix doesn't look right")
 	}
 	piece = NewPiece(2, Point{1, 0}, Point{1, 1})
-	puzzle = NewPuzzle(4, 4)
+	puzzle = NewPuzzle(4, 4, simpleBorder)
 	if puzzle.matrix.place(piece, Point{3, 3}) {
 		t.Error("This piece should not fit into the matrix")
 	}
-	puzzle = NewPuzzle(5, 4)
+	puzzle = NewPuzzle(5, 4, simpleBorder)
 	if !puzzle.matrix.place(piece, Point{1, 1}) {
 		t.Error("This piece should fit into the matrix")
 	}
@@ -123,7 +123,7 @@ func TestPlacement(t *testing.T) {
 	}
 	pieceX1 := NewPiece(2, Point{0, 0}, Point{1, 1})
 	pieceX2 := NewPiece(3, Point{0, 1}, Point{1, 0})
-	puzzle = NewPuzzle(4, 4)
+	puzzle = NewPuzzle(4, 4, simpleBorder)
 	puzzle.matrix.place(pieceX1, Point{1, 1})
 	puzzle.matrix.place(pieceX2, Point{1, 1})
 	if !compare(&puzzle.matrix,
@@ -146,7 +146,7 @@ func TestNewPiece(t *testing.T) {
 }
 
 func TestNextCell(t *testing.T) {
-	puzzle := NewPuzzle(5, 3)
+	puzzle := NewPuzzle(5, 3, simpleBorder)
 
 	pnt, ok := puzzle.matrix.nextCell(Point{1, 1})
 	if !ok {
