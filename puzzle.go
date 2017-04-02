@@ -149,7 +149,7 @@ func (piece *Piece) mirror() *Piece {
 			(*mirrored)[x][y] = (*piece).matrix[x][maxY-y-1]
 		}
 	}
-	return &Piece{matrix: *mirrored}
+	return &Piece{matrix: *mirrored, value: piece.value}
 }
 
 func (piece *Piece) rotate() *Piece {

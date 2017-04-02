@@ -59,6 +59,9 @@ func TestMirror(t *testing.T) {
 		[]int{2, 2, 2}) {
 		t.Error("This matrix doesn't look right")
 	}
+	if mirroredPiece.value != 2 {
+		t.Error("This should be different")
+	}
 	piece = NewPiece(3, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1}, Point{3, 3})
 	mirroredPiece = piece.mirror()
 	if !compare(&mirroredPiece.matrix,
@@ -67,6 +70,9 @@ func TestMirror(t *testing.T) {
 		[]int{0, 0, 3, 0},
 		[]int{3, 3, 3, 0}) {
 		t.Error("This matrix doesn't look right")
+	}
+	if mirroredPiece.value != 3 {
+		t.Error("This should be different")
 	}
 }
 
