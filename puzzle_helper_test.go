@@ -34,11 +34,17 @@ func TestRotate(t *testing.T) {
 		[]int{2, 2}) {
 		t.Error("This matrix doesn't look right")
 	}
+	if rotatedPiece.value != 2 {
+		t.Error("This should be different")
+	}
 	rotatedPiece2 := rotatedPiece.rotate()
 	if !compare(&rotatedPiece2.matrix,
 		[]int{2, 0, 0},
 		[]int{2, 2, 2}) {
 		t.Error("This matrix doesn't look right")
+	}
+	if rotatedPiece2.value != 2 {
+		t.Error("This should be different")
 	}
 }
 

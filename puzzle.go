@@ -160,7 +160,7 @@ func (piece *Piece) rotate() *Piece {
 			(*rotated)[maxY-x-1][y] = (*piece).matrix[y][x]
 		}
 	}
-	return &Piece{matrix: *rotated}
+	return &Piece{matrix: *rotated, value: piece.value}
 }
 
 func (piece *Piece) permutate() []*Piece {
@@ -245,7 +245,7 @@ func (p *Puzzle) dump() {
 	for pp_index, permutatedPiece := range p.permutatedPieces {
 		fmt.Printf("Piece #%d (%d permutations)\n", pp_index, len(permutatedPiece))
 		for p_index, piece := range permutatedPiece {
-			fmt.Println(p_index)
+			fmt.Printf("index %d, value %d\n", p_index, piece.value)
 			piece.matrix.dump()
 		}
 	}
