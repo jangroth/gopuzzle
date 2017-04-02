@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestTrivialSolve(t *testing.T) {
+func aTestTrivialSolve(t *testing.T) {
 	p1 := NewPiece(2, Point{0, 0}, Point{1, 0})
 	puzzle := NewPuzzle(4, 3, simpleBorder, *p1)
 	ok := Solve(puzzle, Point{0, 0})
@@ -13,7 +13,7 @@ func TestTrivialSolve(t *testing.T) {
 	}
 }
 
-func TestNoSolution(t *testing.T) {
+func aTestNoSolution(t *testing.T) {
 	p1 := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{1, 1})
 	puzzle := NewPuzzle(4, 3, simpleBorder, *p1)
 	ok := Solve(puzzle, Point{0, 0})
@@ -22,7 +22,7 @@ func TestNoSolution(t *testing.T) {
 	}
 }
 
-func TestTwoPiedeSolve(t *testing.T) {
+func aTestTwoPiedeSolve(t *testing.T) {
 	p1 := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{1, 1})
 	p2 := NewPiece(3, Point{0, 0}, Point{1, 0}, Point{1, 1})
 	puzzle := NewPuzzle(5, 4, simpleBorder, *p1, *p2)
@@ -62,8 +62,11 @@ func TestNiftyFifty(t *testing.T) {
 		Point{11, 13}, Point{11, 14}, Point{11, 15}, Point{11, 16})
 	p4.matrix.dump()
 
-	puzzle := NewPuzzle(21, 21, niftyFiftyBorder)
-	puzzle.dump()
+	puzzle := NewPuzzle(21, 21, niftyFiftyBorder, *p1, *p2, *p3)
+	ok := Solve(puzzle, Point{0, 0})
+	if !ok {
+		t.Error("This should have been solved")
+	}
 
 	t.Error("d")
 }
