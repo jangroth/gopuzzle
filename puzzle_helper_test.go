@@ -7,16 +7,16 @@ import (
 func TestNewPuzzle(t *testing.T) {
 	piece1 := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
 	piece2 := NewPiece(3, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
-	piece3 := NewPiece(4, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
-	puzzle := NewPuzzle(1, 1, simpleBorder, *piece1, *piece2, *piece3)
+	//piece3 := NewPiece(4, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
+	puzzle := NewPuzzle(1, 1, simpleBorder, *piece1, *piece2)
 	for pp_index, permutatedPieces := range puzzle.permutatedPieces {
 		for p_index, piece := range permutatedPieces {
 			if piece.value != pp_index+2 {
-				puzzle.dump()
 				t.Errorf("Piece #%d / %d, expected value %d, found %d", pp_index, p_index, pp_index+2, piece.value)
 			}
 		}
 	}
+	puzzle.dump()
 }
 
 func TestPermutate(t *testing.T) {
@@ -40,7 +40,7 @@ func TestPermutate(t *testing.T) {
 func TestRotate(t *testing.T) {
 	piece := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
 	rotatedPiece := piece.rotate()
-	if piece == rotatedPiece {
+	if piece == &rotatedPiece {
 		t.Error("These should be two different objects")
 	}
 	if !compare(&rotatedPiece.matrix,
@@ -66,7 +66,7 @@ func TestRotate(t *testing.T) {
 func TestMirror(t *testing.T) {
 	piece := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
 	mirroredPiece := piece.mirror()
-	if piece == mirroredPiece {
+	if piece == &mirroredPiece {
 		t.Error("These should be two different objects")
 	}
 	if !compare(&mirroredPiece.matrix,
