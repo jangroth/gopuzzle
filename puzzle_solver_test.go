@@ -7,7 +7,7 @@ import (
 func TestTrivialSolve(t *testing.T) {
 	p1 := NewPiece(2, Point{0, 0}, Point{1, 0})
 	puzzle := NewPuzzle(4, 3, simpleBorder, *p1)
-	ok := Solve(puzzle, Point{0, 0})
+	ok := Solve(puzzle)
 	if !ok {
 		t.Error("This should have been solved")
 	}
@@ -16,7 +16,7 @@ func TestTrivialSolve(t *testing.T) {
 func noTestNoSolution(t *testing.T) {
 	p1 := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{1, 1})
 	puzzle := NewPuzzle(4, 3, simpleBorder, *p1)
-	ok := Solve(puzzle, Point{0, 0})
+	ok := Solve(puzzle)
 	if ok {
 		t.Error("This should not be solvable")
 	}
@@ -26,7 +26,7 @@ func noTestTwoPiedeSolve(t *testing.T) {
 	p1 := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{1, 1})
 	p2 := NewPiece(3, Point{0, 0}, Point{1, 0}, Point{1, 1})
 	puzzle := NewPuzzle(5, 4, simpleBorder, *p1, *p2)
-	ok := Solve(puzzle, Point{0, 0})
+	ok := Solve(puzzle)
 	if !ok {
 		t.Error("This should have been solved")
 	}
@@ -65,7 +65,7 @@ func noTestNiftyFifty(t *testing.T) {
 	puzzle := NewPuzzle(21, 21, niftyFiftyBorder, *p1, *p2, *p3)
 	puzzle.dump()
 
-	//	ok := Solve(puzzle, Point{0, 0})
+	//	ok := Solve(puzzle)
 	//	if !ok {
 	//		t.Error("This should have been solved")
 	//	}

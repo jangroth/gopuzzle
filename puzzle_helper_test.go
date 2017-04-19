@@ -9,10 +9,10 @@ func TestNewPuzzle(t *testing.T) {
 	piece2 := NewPiece(3, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
 	//piece3 := NewPiece(4, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
 	puzzle := NewPuzzle(1, 1, simpleBorder, *piece1, *piece2)
-	for pp_index, permutatedPieces := range puzzle.permutatedPieces {
-		for p_index, piece := range permutatedPieces {
-			if piece.value != pp_index+2 {
-				t.Errorf("Piece #%d / %d, expected value %d, found %d", pp_index, p_index, pp_index+2, piece.value)
+	for ppIndex, permutatedPieces := range puzzle.permutatedPieces {
+		for pIndex, piece := range permutatedPieces {
+			if piece.value != ppIndex+2 {
+				t.Errorf("Piece #%d / %d, expected value %d, found %d", ppIndex, pIndex, ppIndex+2, piece.value)
 			}
 		}
 	}
@@ -154,8 +154,8 @@ func TestNewPiece(t *testing.T) {
 	if !(len(piece.matrix) == 2 && len(piece.matrix[0]) == 2) {
 		t.Error("Testpiece doesn't have the right size")
 	}
-	if !(piece.matrix[1][0] == 2 && piece.matrix[0][1] == 0 && piece.matrix[1][1] == 2 && piece.matrix[0][0] == 0) {
-		t.Errorf("Testpiece doesn't look right %s", piece)
+	if piece.matrix[1][0] == 2 && piece.matrix[0][1] == 0 && piece.matrix[1][1] == 2 && piece.matrix[0][0] == 0 {
+		t.Errorf("Testpiece doesn't look right %+v", piece)
 	}
 }
 
@@ -167,26 +167,26 @@ func TestNextCell(t *testing.T) {
 		t.Error("This should have been ok")
 	}
 	if !(pnt.x == 2 && pnt.y == 1) {
-		t.Errorf("This doesn't look like the next free cell: ", pnt)
+		t.Errorf("This doesn't look like the next free cell: %s", pnt)
 	}
 
 	pnt, _ = puzzle.matrix.nextCell(Point{0, 0})
 	if !(pnt.x == 1 && pnt.y == 0) {
-		t.Errorf("This doesn't look like the next free cell: ", pnt)
+		t.Errorf("This doesn't look like the next free cell: %s", pnt)
 	}
 
 	pnt, _ = puzzle.matrix.nextCell(Point{4, 0})
 	if !(pnt.x == 0 && pnt.y == 1) {
-		t.Errorf("This doesn't look like the next free cell: ", pnt)
+		t.Errorf("This doesn't look like the next free cell: %s", pnt)
 	}
 
 	_, ok = puzzle.matrix.nextCell(Point{4, 2})
 	if ok {
-		t.Errorf("Failed, this call should not be okay", pnt)
+		t.Errorf("Failed, this call should not be okay %s", pnt)
 	}
 }
 
-func compare(matrix *Matrix, rows ...[]int) bool {
+func compare(matrix *matrix, rows ...[]int) bool {
 	for index, row := range rows {
 		for x := 0; x < len(row); x++ {
 			if (*matrix)[x][index] != row[x] {

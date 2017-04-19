@@ -14,29 +14,34 @@ import (
 
 // types
 
+type matrix [][]int
+
+// Point defines a point in a 2-dimensional matrix
 type Point struct {
 	x, y int
 }
 
-type Matrix [][]int
-
+// Piece defines a a 2-dimensional matrix that is a piece of the puzzle
 type Piece struct {
 	value  int
-	matrix Matrix
+	matrix matrix
 }
 
+// Puzzle defines a a 2-dimensional matrix together with the pieces that should fit into it
 type Puzzle struct {
-	matrix           Matrix
+	matrix           matrix
 	permutatedPieces [][]Piece
 	solution         map[int]*Point
 }
 
+// BorderFun defines a function that describes the borders of a matrix
 type BorderFun func(x, y, maxX, maxY int) (hasBorder bool)
 
 // methods
 
-func NewMatrix(maxX, maxY int) *Matrix {
-	var matrix Matrix
+// TODO: Add BorderFun to method signature
+func newMatrix(maxX, maxY int) *matrix {
+	var matrix matrix
 	for x := 0; x < maxX; x++ {
 		column := make([]int, maxY)
 		matrix = append(matrix, column)
@@ -44,11 +49,11 @@ func NewMatrix(maxX, maxY int) *Matrix {
 	return &matrix
 }
 
-func (matrix *Matrix) dimensions() (maxX, maxY int) {
+func (matrix *matrix) dimensions() (maxX, maxY int) {
 	return len(*matrix), len((*matrix)[0])
 }
 
-func (matrix *Matrix) toString() string {
+func (matrix *matrix) toString() string {
 	maxX, maxY := matrix.dimensions()
 	var result string
 	for y := 0; y < maxY; y++ {
@@ -67,12 +72,12 @@ func (matrix *Matrix) toString() string {
 	return result
 }
 
-func (matrix *Matrix) dump() {
+func (matrix *matrix) dump() {
 	maxX, maxY := matrix.dimensions()
 	fmt.Printf("%ssize: x:%d, y:%d\n", matrix.toString(), maxX, maxY)
 }
 
-func (matrix *Matrix) nextCell(pnt Point) (nextPoint Point, ok bool) {
+func (matrix *matrix) nextCell(pnt Point) (nextPoint Point, ok bool) {
 	maxX, maxY := (*matrix).dimensions()
 	switch {
 	case pnt.x < maxX-1:
@@ -84,7 +89,7 @@ func (matrix *Matrix) nextCell(pnt Point) (nextPoint Point, ok bool) {
 	}
 }
 
-func (matrix *Matrix) testAndPlace(piece *Piece, point Point) (success bool) {
+func (matrix *matrix) testAndPlace(piece *Piece, point Point) (success bool) {
 	matrixX, matrixY := (*matrix).dimensions()
 	pieceX, pieceY := (*piece).matrix.dimensions()
 	if point.x+pieceX > matrixX || point.y+pieceY > matrixY {
@@ -107,7 +112,7 @@ func (matrix *Matrix) testAndPlace(piece *Piece, point Point) (success bool) {
 	return true
 }
 
-func (matrix *Matrix) remove(piece *Piece, point Point) {
+func (matrix *matrix) remove(piece *Piece, point Point) {
 	(*matrix).dump()
 	pieceX, pieceY := (*piece).matrix.dimensions()
 	for x := 0; x < pieceX; x++ {
@@ -130,6 +135,7 @@ func (matrix *Matrix) remove(piece *Piece, point Point) {
 	fmt.Printf("sanity check passed for %d\n", (*piece).value)
 }
 
+// NewPiece creates a piece of the puzzle
 func NewPiece(value int, points ...Point) *Piece {
 	maxX, maxY := 0, 0
 	for _, val := range points {
@@ -140,7 +146,7 @@ func NewPiece(value int, points ...Point) *Piece {
 			maxY = val.y
 		}
 	}
-	matrix := NewMatrix(maxX+1, maxY+1)
+	matrix := newMatrix(maxX+1, maxY+1)
 	for _, val := range points {
 		(*matrix)[val.x][val.y] = value
 	}
@@ -149,7 +155,7 @@ func NewPiece(value int, points ...Point) *Piece {
 
 func (piece Piece) mirror() Piece {
 	maxX, maxY := piece.matrix.dimensions()
-	mirrored := NewMatrix(maxX, maxY)
+	mirrored := newMatrix(maxX, maxY)
 	for x := 0; x < maxX; x++ {
 		for y := 0; y < maxY; y++ {
 			(*mirrored)[x][y] = piece.matrix[x][maxY-y-1]
@@ -160,7 +166,7 @@ func (piece Piece) mirror() Piece {
 
 func (piece Piece) rotate() Piece {
 	maxX, maxY := piece.matrix.dimensions()
-	rotated := NewMatrix(maxY, maxX)
+	rotated := newMatrix(maxY, maxX)
 	for x := 0; x < maxY; x++ {
 		for y := 0; y < maxX; y++ {
 			(*rotated)[maxY-x-1][y] = piece.matrix[y][x]
@@ -194,8 +200,9 @@ func (piece Piece) permutate() []Piece {
 	return results
 }
 
+// NewPuzzle create a puzzle
 func NewPuzzle(maxX, maxY int, hasBorder BorderFun, pieces ...Piece) Puzzle {
-	matrix := NewMatrix(maxX, maxY)
+	matrix := newMatrix(maxX, maxY)
 	for x := 0; x < maxX; x++ {
 		for y := 0; y < maxY; y++ {
 			if hasBorder(x, y, maxX, maxY) {
@@ -226,10 +233,10 @@ func (p Point) String() string {
 func (p *Puzzle) dump() {
 	fmt.Printf("Dump puzzle (%p):\n", &p)
 	p.matrix.dump()
-	for pp_index, permutatedPiece := range p.permutatedPieces {
-		fmt.Printf("Piece #%d (%d permutations)\n", pp_index, len(permutatedPiece))
-		for p_index, piece := range permutatedPiece {
-			fmt.Printf("index %d, value %d\n", p_index, piece.value)
+	for ppIndex, permutatedPiece := range p.permutatedPieces {
+		fmt.Printf("Piece #%d (%d permutations)\n", ppIndex, len(permutatedPiece))
+		for pIndex, piece := range permutatedPiece {
+			fmt.Printf("index %d, value %d\n", pIndex, piece.value)
 			piece.matrix.dump()
 		}
 	}
@@ -244,73 +251,75 @@ func simpleBorder(x, y, maxX, maxY int) bool {
 func niftyFiftyBorder(x, y, maxX, maxY int) bool {
 	if maxX != 21 || maxY != 21 {
 		return false
-	} else {
-		var result bool
-		switch {
-		case y == 1:
-			result = x >= 8
-		case y == 2 || y == 3:
-			result = x >= 9
-		case y == 4 || y == 5:
-			result = x >= 12
-		case y == 6:
-			result = x >= 15
-		case y == 7 || y == 8 || y == 9:
-			result = x >= 16
-		case y == 10:
-			result = x <= 2 || x >= 17
-		case y == 11:
-			result = x <= 5 || x >= 17
-		case y == 12 || y == 13:
-			result = x <= 5
-		case y == 14:
-			result = x <= 6
-		case y == 15 || y == 16:
-			result = x <= 7
-		case y == 17 || y == 18:
-			result = x <= 9
-		case y == 19:
-			result = x <= 10
-		}
-		return result || simpleBorder(x, y, maxX, maxY)
 	}
+	var result bool
+	switch {
+	case y == 1:
+		result = x >= 8
+	case y == 2 || y == 3:
+		result = x >= 9
+	case y == 4 || y == 5:
+		result = x >= 12
+	case y == 6:
+		result = x >= 15
+	case y == 7 || y == 8 || y == 9:
+		result = x >= 16
+	case y == 10:
+		result = x <= 2 || x >= 17
+	case y == 11:
+		result = x <= 5 || x >= 17
+	case y == 12 || y == 13:
+		result = x <= 5
+	case y == 14:
+		result = x <= 6
+	case y == 15 || y == 16:
+		result = x <= 7
+	case y == 17 || y == 18:
+		result = x <= 9
+	case y == 19:
+		result = x <= 10
+	}
+	return result || simpleBorder(x, y, maxX, maxY)
 }
 
-func Solve(p Puzzle, startingPnt Point) (success bool) {
+func solve(p Puzzle, startingPnt Point) (success bool) {
 	if len(p.permutatedPieces) == len(p.solution) {
 		p.dump()
 		fmt.Println("Solved!")
 		return true
-	} else {
-		//  not solved yet. Try remaining pieces
-		for pp_index, permutatedPiece := range p.permutatedPieces {
-			_, alreadyInSolution := p.solution[pp_index]
-			if !alreadyInSolution {
-				for p_index, piece := range permutatedPiece {
-					if p.matrix.testAndPlace(&piece, startingPnt) {
-						fmt.Printf("\n%s ", strings.Repeat(">", len(p.solution)+1))
-						fmt.Printf("Placing piece #%d(%d)/%d at %s!\n", piece.value, piece.matrix[0][0], p_index, startingPnt)
-						p.solution[pp_index] = &startingPnt
-						found_solution := Solve(p, Point{0, 0})
-						if found_solution {
-							// found solution, no need to try anything else
-							return true
-						} else {
-							// no solution found, remove and try next permutation / piece
-							fmt.Printf("%s Removing piece #%d/%d at %s!\n", strings.Repeat(">", len(p.solution)+1), pp_index, p_index, startingPnt)
-							p.matrix.remove(&piece, startingPnt)
-							delete(p.solution, pp_index)
-						}
+	}
+	//  not solved yet. Try remaining pieces
+	for ppIndex, permutatedPiece := range p.permutatedPieces {
+		_, alreadyInSolution := p.solution[ppIndex]
+		if !alreadyInSolution {
+			for pIndex, piece := range permutatedPiece {
+				if p.matrix.testAndPlace(&piece, startingPnt) {
+					fmt.Printf("\n%s ", strings.Repeat(">", len(p.solution)+1))
+					fmt.Printf("Placing piece #%d(%d)/%d at %s!\n", piece.value, piece.matrix[0][0], pIndex, startingPnt)
+					p.solution[ppIndex] = &startingPnt
+					foundSolution := solve(p, Point{0, 0})
+					if foundSolution {
+						// found solution, no need to try anything else
+						return true
 					}
+					// no solution found, remove and try next permutation / piece
+					fmt.Printf("%s Removing piece #%d/%d at %s!\n", strings.Repeat(">", len(p.solution)+1), ppIndex, pIndex, startingPnt)
+					p.matrix.remove(&piece, startingPnt)
+					delete(p.solution, ppIndex)
 				}
 			}
 		}
 		nextPoint, hasNext := p.matrix.nextCell(startingPnt)
 		if hasNext {
-			return Solve(p, nextPoint)
+			return solve(p, nextPoint)
 		}
 	}
 	return false
+}
+
+// Solve solves the puzzle.
+func Solve(p Puzzle) (success bool) {
+	return solve(p, Point{0, 0})
 }
 
 func main() {
