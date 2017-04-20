@@ -39,12 +39,16 @@ type BorderFun func(x, y, maxX, maxY int) (hasBorder bool)
 
 // methods
 
-// TODO: Add BorderFun to method signature
-func newMatrix(maxX, maxY int) *matrix {
+func newMatrix(maxX, maxY int, borderFun BorderFun) *matrix {
 	var matrix matrix
 	for x := 0; x < maxX; x++ {
 		column := make([]int, maxY)
 		matrix = append(matrix, column)
+		for y := 0; y < maxY; y++ {
+			if borderFun(x, y, maxX, maxY) {
+				matrix[x][y] = 1
+			}
+		}
 	}
 	return &matrix
 }
@@ -146,7 +150,7 @@ func NewPiece(value int, points ...Point) *Piece {
 			maxY = val.y
 		}
 	}
-	matrix := newMatrix(maxX+1, maxY+1)
+	matrix := newMatrix(maxX+1, maxY+1, noBorder)
 	for _, val := range points {
 		(*matrix)[val.x][val.y] = value
 	}
@@ -155,7 +159,7 @@ func NewPiece(value int, points ...Point) *Piece {
 
 func (piece Piece) mirror() Piece {
 	maxX, maxY := piece.matrix.dimensions()
-	mirrored := newMatrix(maxX, maxY)
+	mirrored := newMatrix(maxX, maxY, noBorder)
 	for x := 0; x < maxX; x++ {
 		for y := 0; y < maxY; y++ {
 			(*mirrored)[x][y] = piece.matrix[x][maxY-y-1]
@@ -166,7 +170,7 @@ func (piece Piece) mirror() Piece {
 
 func (piece Piece) rotate() Piece {
 	maxX, maxY := piece.matrix.dimensions()
-	rotated := newMatrix(maxY, maxX)
+	rotated := newMatrix(maxY, maxX, noBorder)
 	for x := 0; x < maxY; x++ {
 		for y := 0; y < maxX; y++ {
 			(*rotated)[maxY-x-1][y] = piece.matrix[y][x]
@@ -200,16 +204,9 @@ func (piece Piece) permutate() []Piece {
 	return results
 }
 
-// NewPuzzle create a puzzle
-func NewPuzzle(maxX, maxY int, hasBorder BorderFun, pieces ...Piece) Puzzle {
-	matrix := newMatrix(maxX, maxY)
-	for x := 0; x < maxX; x++ {
-		for y := 0; y < maxY; y++ {
-			if hasBorder(x, y, maxX, maxY) {
-				(*matrix)[x][y] = 1
-			}
-		}
-	}
+// NewPuzzle creates a puzzle
+func NewPuzzle(maxX, maxY int, borderFun BorderFun, pieces ...Piece) Puzzle {
+	matrix := newMatrix(maxX, maxY, borderFun)
 	var permutatedPieces [][]Piece
 	for _, piece := range pieces {
 		foo := piece.permutate()
@@ -243,6 +240,10 @@ func (p *Puzzle) dump() {
 }
 
 // functions
+
+func noBorder(x, y, maxX, maxY int) bool {
+	return false
+}
 
 func simpleBorder(x, y, maxX, maxY int) bool {
 	return (y == 0 || y == maxY-1) || (x == 0 || x == maxX-1)
