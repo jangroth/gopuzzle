@@ -126,17 +126,6 @@ func (matrix *matrix) remove(piece *Piece, point Point) {
 			}
 		}
 	}
-	matrixX, matrixY := (*matrix).dimensions()
-	for y := 0; y < matrixY; y++ {
-		for x := 0; x < matrixX; x++ {
-			if (*matrix)[x][y] == (*piece).value {
-				fmt.Printf("sanity check failed for %d\n", (*piece).value)
-				(*matrix).dump()
-				return
-			}
-		}
-	}
-	fmt.Printf("sanity check passed for %d\n", (*piece).value)
 }
 
 // NewPiece creates a piece of the puzzle
@@ -188,19 +177,12 @@ func (piece Piece) permutate() []Piece {
 			workpiece = workpiece.mirror()
 		}
 		workpiece = workpiece.rotate()
-		fmt.Printf("matrix %d (%p)\n", i, &workpiece)
-		workpiece.matrix.dump()
 		resultMap[workpiece.matrix.toString()] = workpiece
 	}
 	var results []Piece
 	for _, result := range resultMap {
 		results = append(results, result)
 	}
-	fmt.Println("in permutate:")
-	for _, val := range results {
-		fmt.Printf("%d-", val.value)
-	}
-	fmt.Println()
 	return results
 }
 
@@ -211,14 +193,6 @@ func NewPuzzle(maxX, maxY int, borderFun BorderFun, pieces ...Piece) Puzzle {
 	for _, piece := range pieces {
 		foo := piece.permutate()
 		permutatedPieces = append(permutatedPieces, foo)
-		fmt.Println(foo)
-	}
-	fmt.Println("in newpuzzle:")
-	for _, pp := range permutatedPieces {
-		for _, val := range pp {
-			fmt.Printf("%d-", val.value)
-		}
-		fmt.Println()
 	}
 	return Puzzle{matrix: *matrix, permutatedPieces: permutatedPieces, solution: make(map[int]*Point)}
 }
