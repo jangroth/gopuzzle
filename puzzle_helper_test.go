@@ -19,21 +19,21 @@ func TestNewPuzzle(t *testing.T) {
 	puzzle.dump()
 }
 
-func NoTestPermutate(t *testing.T) {
+func TestPermutate(t *testing.T) {
 	piece := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
 	permutatedPieces := piece.permutate()
 	if !(len(permutatedPieces) == 8) {
-		t.Error("Expected 8 different pieces")
+		t.Errorf("Expected 8 different pieces, found %v", permutatedPieces)
 	}
 	piece = NewPiece(2, Point{0, 0}, Point{1, 0}, Point{1, 1})
 	permutatedPieces = piece.permutate()
 	if !(len(permutatedPieces) == 4) {
-		t.Error("Expected 4 different pieces")
+		t.Errorf("Expected 8 different pieces, found %d", len(permutatedPieces))
 	}
 	piece = NewPiece(2, Point{0, 0})
 	permutatedPieces = piece.permutate()
 	if !(len(permutatedPieces) == 1) {
-		t.Error("Expected 1 different piece")
+		t.Errorf("Expected 8 different pieces, found %d", len(permutatedPieces))
 	}
 }
 
@@ -82,7 +82,7 @@ func TestRotate(t *testing.T) {
 func TestMirror(t *testing.T) {
 	piece := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
 	mirroredPiece := piece.mirror()
-	if piece == &mirroredPiece {
+	if &piece == &mirroredPiece {
 		t.Error("These should be two different objects")
 	}
 	if !compare(&mirroredPiece.matrix,
