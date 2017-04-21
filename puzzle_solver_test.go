@@ -13,7 +13,7 @@ func TestTrivialSolve(t *testing.T) {
 	}
 }
 
-func noTestNoSolution(t *testing.T) {
+func TestNoSolution(t *testing.T) {
 	p1 := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{1, 1})
 	puzzle := NewPuzzle(4, 3, simpleBorder, *p1)
 	ok := Solve(puzzle)
@@ -22,7 +22,7 @@ func noTestNoSolution(t *testing.T) {
 	}
 }
 
-func noTestTwoPiedeSolve(t *testing.T) {
+func noTestTwoPieceSolve(t *testing.T) {
 	p1 := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{1, 1})
 	p2 := NewPiece(3, Point{0, 0}, Point{1, 0}, Point{1, 1})
 	puzzle := NewPuzzle(5, 4, simpleBorder, *p1, *p2)

@@ -193,8 +193,7 @@ func NewPuzzle(maxX, maxY int, borderFun BorderFun, pieces ...Piece) Puzzle {
 	matrix := newMatrix(maxX, maxY, borderFun)
 	var permutatedPieces [][]*Piece
 	for _, piece := range pieces {
-		foo := piece.permutate()
-		permutatedPieces = append(permutatedPieces, foo)
+		permutatedPieces = append(permutatedPieces, piece.permutate())
 	}
 	return Puzzle{matrix: *matrix, permutatedPieces: permutatedPieces, solution: make(map[int]*Point)}
 }

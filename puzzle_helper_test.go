@@ -6,9 +6,9 @@ import (
 
 func TestNewPuzzle(t *testing.T) {
 	piece1 := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
-	piece2 := NewPiece(3, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
-	//piece3 := NewPiece(4, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
-	puzzle := NewPuzzle(1, 1, simpleBorder, *piece1, *piece2)
+	piece2 := NewPiece(3, Point{0, 0}, Point{1, 0}, Point{1, 1})
+	piece3 := NewPiece(4, Point{0, 0})
+	puzzle := NewPuzzle(1, 1, simpleBorder, *piece1, *piece2, *piece3)
 	for ppIndex, permutatedPieces := range puzzle.permutatedPieces {
 		for pIndex, piece := range permutatedPieces {
 			if piece.value != ppIndex+2 {
