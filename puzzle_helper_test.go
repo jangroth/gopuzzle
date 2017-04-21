@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -65,8 +64,19 @@ func TestRotate(t *testing.T) {
 	if rotatedPiece2.value != 2 {
 		t.Error("This should be different")
 	}
-	fmt.Printf("orig: %p - rot1 %p - rot2 %p", piece, rotatedPiece, rotatedPiece2)
-	t.Error("fail here")
+	rotatedPiece3 := rotatedPiece2.rotate()
+	if &rotatedPiece3 == &rotatedPiece2 {
+		t.Error("These should be two different objects")
+	}
+	if !compare(&rotatedPiece3.matrix,
+		[]int{2, 2},
+		[]int{2, 0},
+		[]int{2, 0}) {
+		t.Error("This matrix doesn't look right")
+	}
+	if rotatedPiece3.value != 2 {
+		t.Error("This should be different")
+	}
 }
 
 func TestMirror(t *testing.T) {
