@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -40,7 +41,7 @@ func NoTestPermutate(t *testing.T) {
 func TestRotate(t *testing.T) {
 	piece := NewPiece(2, Point{0, 0}, Point{1, 0}, Point{2, 0}, Point{2, 1})
 	rotatedPiece := piece.rotate()
-	if piece == &rotatedPiece {
+	if piece == rotatedPiece {
 		t.Error("These should be two different objects")
 	}
 	if !compare(&rotatedPiece.matrix,
@@ -50,9 +51,12 @@ func TestRotate(t *testing.T) {
 		t.Error("This matrix doesn't look right")
 	}
 	if rotatedPiece.value != 2 {
-		t.Error("This should be different")
+		t.Errorf("This should be a different piece %+v", rotatedPiece)
 	}
 	rotatedPiece2 := rotatedPiece.rotate()
+	if &rotatedPiece == &rotatedPiece2 {
+		t.Error("These should be two different objects")
+	}
 	if !compare(&rotatedPiece2.matrix,
 		[]int{2, 0, 0},
 		[]int{2, 2, 2}) {
@@ -61,6 +65,8 @@ func TestRotate(t *testing.T) {
 	if rotatedPiece2.value != 2 {
 		t.Error("This should be different")
 	}
+	fmt.Printf("orig: %p - rot1 %p - rot2 %p", piece, rotatedPiece, rotatedPiece2)
+	t.Error("fail here")
 }
 
 func TestMirror(t *testing.T) {

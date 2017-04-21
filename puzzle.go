@@ -157,7 +157,7 @@ func (piece Piece) mirror() Piece {
 	return Piece{matrix: *mirrored, value: piece.value}
 }
 
-func (piece Piece) rotate() Piece {
+func (piece Piece) rotate() *Piece {
 	maxX, maxY := piece.matrix.dimensions()
 	rotated := newMatrix(maxY, maxX, noBorder)
 	for x := 0; x < maxY; x++ {
@@ -165,25 +165,26 @@ func (piece Piece) rotate() Piece {
 			(*rotated)[maxY-x-1][y] = piece.matrix[y][x]
 		}
 	}
-	return Piece{matrix: *rotated, value: piece.value}
+	return &Piece{matrix: *rotated, value: piece.value}
 }
 
 func (piece Piece) permutate() []Piece {
-	resultMap := make(map[string]Piece)
-	resultMap[piece.matrix.toString()] = piece
-	for i := 0; i < 7; i++ {
-		workpiece := piece
-		if i == 3 {
-			workpiece = workpiece.mirror()
-		}
-		workpiece = workpiece.rotate()
-		resultMap[workpiece.matrix.toString()] = workpiece
-	}
-	var results []Piece
-	for _, result := range resultMap {
-		results = append(results, result)
-	}
-	return results
+	//	resultMap := make(map[string]Piece)
+	//	resultMap[piece.matrix.toString()] = piece
+	//	for i := 0; i < 7; i++ {
+	//		workpiece := piece
+	//		if i == 3 {
+	//			workpiece = workpiece.mirror()
+	//		}
+	//		workpiece = workpiece.rotate()
+	//		resultMap[workpiece.matrix.toString()] = workpiece
+	//	}
+	//	var results []Piece
+	//	for _, result := range resultMap {
+	//		results = append(results, result)
+	//	}
+	//	return results
+	return nil
 }
 
 // NewPuzzle creates a puzzle
