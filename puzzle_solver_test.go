@@ -60,7 +60,6 @@ func TestNiftyFifty(t *testing.T) {
 	p4.matrix.dump()
 
 	puzzle := NewPuzzle(21, 21, niftyFiftyBorder, *p1, *p2, *p3, *p4)
-	puzzle.dump(false)
 
 	ok := Solve(puzzle)
 	if !ok {
