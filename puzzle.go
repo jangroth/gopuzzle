@@ -259,36 +259,36 @@ func niftyFiftyBorder(x, y, maxX, maxY int) bool {
 }
 
 func solve(p Puzzle, startingPnt Point) (success bool) {
+	fmt.Printf("Okay lets solve this. Solution so far:%v, startingPoint:%s\n", p.solution, startingPnt)
 	if len(p.permutatedPieces) == len(p.solution) {
 		p.dump()
 		fmt.Println("Solved!")
 		return true
 	}
 	//  not solved yet. Try remaining pieces
-	for ppIndex, permutatedPiece := range p.permutatedPieces {
-		_, alreadyInSolution := p.solution[ppIndex]
+	for outerIndex, permutatedPiece := range p.permutatedPieces {
+		fmt.Printf("Outer index %d, solution: %v\n", outerIndex, p.solution)
+		_, alreadyInSolution := p.solution[outerIndex]
 		if !alreadyInSolution {
-			for pIndex, piece := range permutatedPiece {
+			for innerIndex, piece := range permutatedPiece {
 				if p.matrix.testAndPlace(piece, startingPnt) {
-					fmt.Printf("\n%s ", strings.Repeat(">", len(p.solution)+1))
-					fmt.Printf("Placing piece #%d(%d)/%d at %s!\n", piece.value, piece.matrix[0][0], pIndex, startingPnt)
-					p.solution[ppIndex] = &startingPnt
+					fmt.Printf("%s Placing piece #%d/%d at %s!\n", strings.Repeat(">", len(p.solution)+1), outerIndex, innerIndex, startingPnt)
+					p.solution[outerIndex] = &startingPnt
 					foundSolution := solve(p, Point{0, 0})
 					if foundSolution {
-						// found solution, no need to try anything else
 						return true
 					}
 					// no solution found, remove and try next permutation / piece
-					fmt.Printf("%s Removing piece #%d/%d at %s!\n", strings.Repeat(">", len(p.solution)+1), ppIndex, pIndex, startingPnt)
+					fmt.Printf("%s Removing piece #%d/%d at %s!\n", strings.Repeat(">", len(p.solution)+1), outerIndex, innerIndex, startingPnt)
 					p.matrix.remove(piece, startingPnt)
-					delete(p.solution, ppIndex)
+					delete(p.solution, outerIndex)
 				}
 			}
 		}
-		nextPoint, hasNext := p.matrix.nextCell(startingPnt)
-		if hasNext {
-			return solve(p, nextPoint)
-		}
+	}
+	nextPoint, hasNext := p.matrix.nextCell(startingPnt)
+	if hasNext {
+		return solve(p, nextPoint)
 	}
 	return false
 }
