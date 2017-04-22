@@ -202,14 +202,16 @@ func (p Point) String() string {
 	return fmt.Sprintf("(%d,%d)", p.x, p.y)
 }
 
-func (p *Puzzle) dump() {
+func (p *Puzzle) dump(dumpPieces bool) {
 	fmt.Printf("Dump puzzle (%p):\n", &p)
 	p.matrix.dump()
 	for ppIndex, permutatedPiece := range p.permutatedPieces {
 		fmt.Printf("Piece #%d (%d permutations)\n", ppIndex, len(permutatedPiece))
-		for pIndex, piece := range permutatedPiece {
-			fmt.Printf("index %d, value %d\n", pIndex, piece.value)
-			piece.matrix.dump()
+		if dumpPieces {
+			for pIndex, piece := range permutatedPiece {
+				fmt.Printf("index %d, value %d\n", pIndex, piece.value)
+				piece.matrix.dump()
+			}
 		}
 	}
 }
@@ -259,15 +261,13 @@ func niftyFiftyBorder(x, y, maxX, maxY int) bool {
 }
 
 func solve(p Puzzle, startingPnt Point) (success bool) {
-	fmt.Printf("Okay lets solve this. Solution so far:%v, startingPoint:%s\n", p.solution, startingPnt)
 	if len(p.permutatedPieces) == len(p.solution) {
-		p.dump()
+		p.dump(false)
 		fmt.Println("Solved!")
 		return true
 	}
 	//  not solved yet. Try remaining pieces
 	for outerIndex, permutatedPiece := range p.permutatedPieces {
-		fmt.Printf("Outer index %d, solution: %v\n", outerIndex, p.solution)
 		_, alreadyInSolution := p.solution[outerIndex]
 		if !alreadyInSolution {
 			for innerIndex, piece := range permutatedPiece {
@@ -299,5 +299,5 @@ func Solve(p Puzzle) (success bool) {
 }
 
 func main() {
-	//
+	// puzzle_solver_helper_test.TestNiftyFifty
 }

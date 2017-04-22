@@ -16,7 +16,7 @@ func TestNewPuzzle(t *testing.T) {
 			}
 		}
 	}
-	puzzle.dump()
+	puzzle.dump(false)
 }
 
 func TestPermutate(t *testing.T) {
