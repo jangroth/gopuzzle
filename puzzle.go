@@ -117,7 +117,6 @@ func (matrix *matrix) testAndPlace(piece *Piece, point Point) (success bool) {
 }
 
 func (matrix *matrix) remove(piece *Piece, point Point) {
-	(*matrix).dump()
 	pieceX, pieceY := (*piece).matrix.dimensions()
 	for x := 0; x < pieceX; x++ {
 		for y := 0; y < pieceY; y++ {
